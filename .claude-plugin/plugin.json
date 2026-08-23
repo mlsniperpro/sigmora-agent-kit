@@ -1,0 +1,15 @@
+{
+  "name": "sigmora",
+  "version": "0.1.0",
+  "description": "Project-first, review-first Sigmora media workflows for Claude Code.",
+  "author": {
+    "name": "Sigmora",
+    "email": "support@sigmora.org",
+    "url": "https://sigmora.org"
+  },
+  "homepage": "https://docs.sigmora.org/mcp-server",
+  "license": "UNLICENSED",
+  "keywords": ["media", "video", "editing", "mcp", "sigmora"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

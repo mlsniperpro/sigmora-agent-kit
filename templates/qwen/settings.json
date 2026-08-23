@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "sigmora": {
+      "httpUrl": "https://api.sigmora.org/mcp",
+      "authProviderType": "dynamic_discovery",
+      "timeout": 30000,
+      "trust": false
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "projectId": "prj_example",
+  "sourceHarness": "codex",
+  "clientVersion": "0.1.0",
+  "externalSessionId": "hostsession_opaque_random_example",
+  "privacyMode": "artifacts_only",
+  "dashboardUrl": "https://app.sigmora.org/projects/prj_example"
+}

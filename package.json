@@ -1,0 +1,44 @@
+{
+  "name": "@sigmora/agent-kit",
+  "version": "0.1.0",
+  "description": "Portable Sigmora media skill, host MCP templates, and a safe local upload/configuration CLI.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "sigmora": "./bin/sigmora.js"
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./upload": "./lib/upload.js"
+  },
+  "files": [
+    ".codex-plugin/",
+    ".claude-plugin/",
+    ".zcode-plugin/",
+    ".mcp.json",
+    "bin/",
+    "examples/",
+    "lib/",
+    "scripts/",
+    "skills/",
+    "templates/",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js && node scripts/validate.mjs && node scripts/package-check.mjs",
+    "test:unit": "node --test test/*.test.js",
+    "validate": "node scripts/validate.mjs",
+    "package:check": "node scripts/package-check.mjs"
+  },
+  "keywords": [
+    "sigmora",
+    "codex",
+    "claude-code",
+    "mcp",
+    "video-editing",
+    "agent-skill"
+  ]
+}

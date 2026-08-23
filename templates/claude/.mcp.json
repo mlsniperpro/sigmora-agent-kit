@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "sigmora": {
+      "type": "http",
+      "url": "https://api.sigmora.org/mcp",
+      "headers": {
+        "Authorization": "Bearer ${SIGMORA_API_KEY}"
+      }
+    }
+  }
+}

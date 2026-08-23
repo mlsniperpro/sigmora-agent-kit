@@ -1,0 +1,16 @@
+# BEGIN SIGMORA AGENT KIT
+- id: mcp-sigmora
+  name: '@deepseek-ai/dsh-mcp-client'
+  config:
+    serverName: sigmora
+    transport: streamable-http
+    url: https://api.sigmora.org/mcp
+    headers:
+      Authorization: !!js '`Bearer ${process.env.SIGMORA_API_KEY}`'
+    failOnStartupError: true
+    reconnect:
+      enabled: true
+      initialDelayMs: 500
+      maxDelayMs: 30000
+      maxAttempts: 10
+# END SIGMORA AGENT KIT

@@ -1,0 +1,9 @@
+# BEGIN SIGMORA AGENT KIT
+[mcp_servers.sigmora]
+url = "https://api.sigmora.org/mcp"
+bearer_token_env_var = "SIGMORA_API_KEY"
+enabled = true
+default_tools_approval_mode = "prompt"
+startup_timeout_sec = 20
+tool_timeout_sec = 120
+# END SIGMORA AGENT KIT

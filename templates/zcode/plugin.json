@@ -1,0 +1,14 @@
+{
+  "name": "sigmora",
+  "version": "0.1.0",
+  "description": "Project-first, review-first Sigmora media workflows for ZCode.",
+  "author": {
+    "name": "Sigmora",
+    "email": "support@sigmora.org",
+    "url": "https://sigmora.org"
+  },
+  "homepage": "https://docs.sigmora.org/mcp-server",
+  "license": "UNLICENSED",
+  "skills": "skills",
+  "mcpServers": ".mcp.json"
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "sigmora": {
+      "type": "http",
+      "url": "https://api.sigmora.org/mcp"
+    }
+  }
+}

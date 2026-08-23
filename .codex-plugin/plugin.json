@@ -1,0 +1,32 @@
+{
+  "name": "sigmora",
+  "version": "0.1.0",
+  "description": "Project-first media workflows, reviewable edits, and durable Sigmora jobs from Codex.",
+  "author": {
+    "name": "Sigmora",
+    "email": "support@sigmora.org",
+    "url": "https://sigmora.org"
+  },
+  "homepage": "https://docs.sigmora.org/mcp-server",
+  "license": "UNLICENSED",
+  "keywords": ["media", "video", "editing", "mcp", "sigmora"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Sigmora Media",
+    "shortDescription": "Plan, review, and render media in Sigmora.",
+    "longDescription": "Connect Codex to a Sigmora workspace for project-scoped media discovery, review-first editing, asynchronous jobs, and signed artifacts.",
+    "developerName": "Sigmora",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write"],
+    "websiteURL": "https://sigmora.org",
+    "privacyPolicyURL": "https://sigmora.org/privacy",
+    "termsOfServiceURL": "https://sigmora.org/terms",
+    "defaultPrompt": [
+      "Review my project footage and propose an edit.",
+      "Check the status of my Sigmora media jobs.",
+      "Upload local footage to my current project."
+    ],
+    "brandColor": "#7C3AED"
+  }
+}
