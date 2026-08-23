@@ -3,6 +3,7 @@
     "sigmora": {
       "type": "http",
       "url": "https://api.sigmora.org/mcp",
+      "bearer_token_env_var": "SIGMORA_API_KEY",
       "headers": {
         "Authorization": "Bearer ${SIGMORA_API_KEY}"
       }

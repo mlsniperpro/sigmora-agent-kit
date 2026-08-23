@@ -1,6 +1,6 @@
 {
   "name": "sigmora",
-  "version": "0.1.0",
+  "version": "0.1.0+codex.20260823160643",
   "description": "Project-first media workflows, reviewable edits, and durable Sigmora jobs from Codex.",
   "author": {
     "name": "Sigmora",
@@ -9,7 +9,13 @@
   },
   "homepage": "https://docs.sigmora.org/mcp-server",
   "license": "UNLICENSED",
-  "keywords": ["media", "video", "editing", "mcp", "sigmora"],
+  "keywords": [
+    "media",
+    "video",
+    "editing",
+    "mcp",
+    "sigmora"
+  ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
@@ -18,7 +24,10 @@
     "longDescription": "Connect Codex to a Sigmora workspace for project-scoped media discovery, review-first editing, asynchronous jobs, and signed artifacts.",
     "developerName": "Sigmora",
     "category": "Productivity",
-    "capabilities": ["Interactive", "Write"],
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
     "websiteURL": "https://sigmora.org",
     "privacyPolicyURL": "https://sigmora.org/privacy",
     "termsOfServiceURL": "https://sigmora.org/terms",

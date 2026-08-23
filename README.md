@@ -21,8 +21,8 @@ Authenticated CLI traffic defaults to the canonical `https://api.sigmora.org` or
 ## Native plugin entry points
 
 - Codex: `.codex-plugin/plugin.json`, the root `.mcp.json`, and `skills/sigmora-media/`.
-- Claude Code: `.claude-plugin/plugin.json`, the same root `.mcp.json`, and the portable skill.
-- ZCode: `.zcode-plugin/plugin.json`, the same root `.mcp.json`, and the portable skill.
+- Claude Code: `.claude-plugin/plugin.json`, `templates/claude/.mcp.json`, and the portable skill.
+- ZCode: `.zcode-plugin/plugin.json`, `templates/zcode/.mcp.json`, and the portable skill.
 
 The repository-local Codex marketplace is `.agents/plugins/marketplace.json`. A repository marketplace must be added explicitly before installing `sigmora@personal`; Codex's default personal marketplace behavior applies only to the marketplace under the user's home directory.
 

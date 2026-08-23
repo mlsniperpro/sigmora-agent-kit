@@ -42,11 +42,27 @@ for (const script of ['test', 'validate', 'package:check']) check(Boolean(packag
 for (const manifestPath of ['.codex-plugin/plugin.json', '.claude-plugin/plugin.json', '.zcode-plugin/plugin.json']) {
   const manifest = await json(manifestPath);
   check(manifest?.name === 'sigmora', `${manifestPath}: name must be sigmora`);
-  check(manifest?.version === packageJson?.version, `${manifestPath}: version must match package.json`);
+  if (manifestPath === '.codex-plugin/plugin.json') {
+    const escapedVersion = packageJson?.version?.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    check(
+      typeof escapedVersion === 'string' &&
+        new RegExp(`^${escapedVersion}(?:\\+codex\\.[A-Za-z0-9][A-Za-z0-9.-]*)?$`).test(
+          manifest?.version ?? '',
+        ),
+      `${manifestPath}: version must match package.json with only an optional Codex cachebuster`,
+    );
+  } else {
+    check(manifest?.version === packageJson?.version, `${manifestPath}: version must match package.json`);
+  }
   check(typeof manifest?.description === 'string' && manifest.description.length > 20, `${manifestPath}: description is missing`);
   check(manifest?.author?.name === 'Sigmora', `${manifestPath}: author.name must be Sigmora`);
   check(manifest?.homepage === 'https://docs.sigmora.org/mcp-server', `${manifestPath}: homepage must use the canonical MCP docs page`);
-  check(manifest?.mcpServers === './.mcp.json' || manifest?.mcpServers === '.mcp.json', `${manifestPath}: MCP companion path is invalid`);
+  const expectedMcpPath = {
+    '.codex-plugin/plugin.json': './.mcp.json',
+    '.claude-plugin/plugin.json': './templates/claude/.mcp.json',
+    '.zcode-plugin/plugin.json': './templates/zcode/.mcp.json',
+  }[manifestPath];
+  check(manifest?.mcpServers === expectedMcpPath, `${manifestPath}: MCP companion path is invalid`);
 }
 const zcodeTemplateManifest = await json('templates/zcode/plugin.json');
 check(zcodeTemplateManifest?.homepage === 'https://docs.sigmora.org/mcp-server', 'templates/zcode/plugin.json: homepage must use the canonical MCP docs page');
@@ -60,6 +76,11 @@ for (const urlField of ['websiteURL', 'privacyPolicyURL', 'termsOfServiceURL']) 
 const canonical = await json('.mcp.json');
 check(canonical?.mcpServers?.sigmora?.url === 'https://api.sigmora.org/mcp', 'canonical MCP URL is invalid');
 check(canonical?.mcpServers?.sigmora?.headers?.Authorization === 'Bearer ${SIGMORA_API_KEY}', 'canonical MCP auth must reference SIGMORA_API_KEY');
+check(canonical?.mcpServers?.sigmora?.bearer_token_env_var === 'SIGMORA_API_KEY', 'canonical Codex MCP auth must expose bearer_token_env_var');
+
+const codexMcpTemplate = await json('templates/codex/.mcp.json');
+check(codexMcpTemplate?.mcpServers?.sigmora?.bearer_token_env_var === 'SIGMORA_API_KEY', 'Codex MCP template must expose bearer_token_env_var');
+check(codexMcpTemplate?.mcpServers?.sigmora?.headers?.Authorization === 'Bearer ${SIGMORA_API_KEY}', 'Codex MCP template must retain compatibility authorization headers');
 
 for (const host of HOST_NAMES) {
   const descriptor = HOSTS[host];

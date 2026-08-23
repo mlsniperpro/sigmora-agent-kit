@@ -21,10 +21,27 @@ test('Codex, Claude, and ZCode manifests align with the package', async () => {
   for (const path of ['.codex-plugin/plugin.json', '.claude-plugin/plugin.json', '.zcode-plugin/plugin.json']) {
     const manifest = await readJson(path);
     assert.equal(manifest.name, 'sigmora', path);
-    assert.equal(manifest.version, pkg.version, path);
+    if (path === '.codex-plugin/plugin.json') {
+      const escapedVersion = pkg.version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      assert.match(
+        manifest.version,
+        new RegExp(`^${escapedVersion}(?:\\+codex\\.[A-Za-z0-9][A-Za-z0-9.-]*)?$`),
+        path,
+      );
+    } else {
+      assert.equal(manifest.version, pkg.version, path);
+    }
     assert.equal(manifest.author.name, 'Sigmora', path);
     assert.equal(manifest.homepage, 'https://docs.sigmora.org/mcp-server', path);
-    assert.match(manifest.mcpServers, /^(?:\.\/)?\.mcp\.json$/, path);
+    assert.equal(
+      manifest.mcpServers,
+      {
+        '.codex-plugin/plugin.json': './.mcp.json',
+        '.claude-plugin/plugin.json': './templates/claude/.mcp.json',
+        '.zcode-plugin/plugin.json': './templates/zcode/.mcp.json',
+      }[path],
+      path,
+    );
   }
   const codex = await readJson('.codex-plugin/plugin.json');
   assert.equal(codex.skills, './skills/');
@@ -49,6 +66,20 @@ test('every host template uses the canonical endpoint and documented non-secret 
 });
 
 test('host templates use current host-native remote MCP fields', async () => {
+  const canonical = await readJson('.mcp.json');
+  assert.equal(canonical.mcpServers.sigmora.bearer_token_env_var, 'SIGMORA_API_KEY');
+  assert.equal(canonical.mcpServers.sigmora.headers.Authorization, 'Bearer ${SIGMORA_API_KEY}');
+
+  const codexPluginTemplate = await readJson('templates/codex/.mcp.json');
+  assert.equal(codexPluginTemplate.mcpServers.sigmora.bearer_token_env_var, 'SIGMORA_API_KEY');
+  assert.equal(codexPluginTemplate.mcpServers.sigmora.headers.Authorization, 'Bearer ${SIGMORA_API_KEY}');
+
+  for (const path of ['templates/claude/.mcp.json', 'templates/zcode/.mcp.json', 'templates/codebuddy/.mcp.json']) {
+    const template = await readJson(path);
+    assert.equal(template.mcpServers.sigmora.bearer_token_env_var, undefined, path);
+    assert.equal(template.mcpServers.sigmora.headers.Authorization, 'Bearer ${SIGMORA_API_KEY}', path);
+  }
+
   const codex = await readHostTemplate('codex');
   assert.match(codex, /\[mcp_servers\.sigmora\]/);
   assert.match(codex, /bearer_token_env_var = "SIGMORA_API_KEY"/);

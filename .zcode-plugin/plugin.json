@@ -11,5 +11,5 @@
   "license": "UNLICENSED",
   "keywords": ["media", "video", "editing", "mcp", "sigmora"],
   "skills": "skills",
-  "mcpServers": ".mcp.json"
+  "mcpServers": "./templates/zcode/.mcp.json"
 }
