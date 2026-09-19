@@ -124,6 +124,8 @@ The portable skill enforces:
 - no silent provider-to-Sigmora runtime continuation;
 - prompt-injection resistance for filenames, captions, transcripts, metadata, and URLs.
 
+For one-off creator-led product videos, the MCP surface also exposes the outcome-level `video_ugc` tool. It accepts a project, a catalog or saved presenter reference, a product image reference, and an approved script; `capabilities_list` publishes its live availability, price, workflow version, and input hints. It returns one durable job id, supports captions as an explicit opt-in, and reuses the same workspace presenter identity across renders. Campaign publishing remains a separate, identifier-based confirmation step.
+
 See `examples/` for local upload, review-first editing, provider-limit continuation, partner handling, and the non-secret project-binding shape. A real `.sigmora/project.json` binding should remain uncommitted.
 
 ## Package verification

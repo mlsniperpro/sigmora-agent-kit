@@ -36,7 +36,19 @@ Before approval:
 - obtain explicit user approval for the bounded operation;
 - create one idempotency key and reuse it if approval is retried.
 
-Poll durable job state rather than retrying the paid creation call. Treat `succeeded`, `failed`, and `cancelled` as terminal. Return signed preview/final artifact links and the job/receipt identifiers without exposing storage credentials.
+Poll durable job state rather than retrying the paid creation call. Treat `done`, `failed`, `cancelled`, and `qa_failed` as terminal; only `done` means successful completion. When the state is `awaiting_review`, pause polling and present the proposal for review and explicit approval instead of waiting for the job to finish automatically. Return signed preview/final artifact links and the job/receipt identifiers without exposing storage credentials.
+
+## Outcome-level UGC
+
+For a single vertical creator-led product video, use the one `video_ugc` tool rather than assembling a provider-specific chain.
+
+1. Call `capabilities_list` and confirm `video.ugc` is available, its current price, and its published workflow metadata.
+2. Resolve one existing `projectId` and one stable presenter reference: `catalog:<creatorId>:<lookId>` or `saved:<workspacePresenterId>`.
+3. Send a public HTTPS product image or Content Engine content id, an approved 8–600 character script, and `captions: true` only when captions were requested. Never send base64 media or local paths through MCP.
+4. Ask for explicit confirmation of product rights, presenter likeness, and script claims before setting `productRights`, `likenessConsent`, and `scriptClaims` to `true`.
+5. Use one `idempotencyKey`. A `jobId` or `reconciliationRequired` response is durable evidence that the request exists; poll `jobs_get` or replay the same key rather than submitting a second render.
+
+Do not make fictional presenters claim personal use, ownership, results, or recommendations. Reuse the same saved presenter id when visual identity should remain consistent across videos. UGC approval is not publish approval: publishing still requires a separate campaign/destination confirmation.
 
 ## Conditional guidance
 
