@@ -5,5 +5,5 @@
   "clientVersion": "0.1.0",
   "externalSessionId": "hostsession_opaque_random_example",
   "privacyMode": "artifacts_only",
-  "dashboardUrl": "https://app.sigmora.org/projects/prj_example"
+  "dashboardUrl": "https://sigmora.org/projects/prj_example"
 }
