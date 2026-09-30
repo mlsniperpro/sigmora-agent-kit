@@ -34,7 +34,7 @@ On vertical video the engine keeps captions above the bottom ~28% so platform bu
 
 ## Paid steps: quote, agree, run
 1. Call the paid tool once WITHOUT `maxCredits`, with a new `idempotencyKey`. The answer is a quote; nothing is charged.
-2. Show the person the credits it will use and their balance (`usage_get`, if available). Wait for a clear yes.
+2. The quote carries the credits and the workspace balance. Show the person both and wait for a clear yes.
 3. Call it again with the same inputs, `maxCredits` equal to the quoted credits and the SAME `idempotencyKey`.
 4. For a `jobId`, poll `jobs_get` until `done`, `failed`, `cancelled` or `qa_failed`; only `done` is success. Never resubmit because a response or a poll failed; a retry reuses the same key.
 

@@ -10,7 +10,7 @@ description: Use when the person has a long video, podcast or stream and wants s
 Turn one long video into standalone vertical shorts. Decide, don't quiz: choose the best option and do the work; never end on a menu. Only when asked to compare, give 2 to 6 options. Never write sexual or adult content; Sigmora does not make it.
 
 ## Start in one project
-Find the project with `projects_list` or make one with `projects_create`, then call `project_session_start` once (sourceHarness `chatgpt`, privacyMode `artifacts_only`, one stable `externalSessionId` for this conversation) and pass that `projectId` to every later call. If two projects plausibly match, ask one short question before any paid step.
+Find the project with `projects_list` or make one with `projects_create`, and pass that `projectId` to every later call in this conversation. If two projects plausibly match, ask one short question before any paid step.
 
 ## 1. Bring the video in
 `assets_import` with the file or a public URL (YouTube works). A very large file: `assets_upload_prepare` returns an upload link bound to the project. Wait until the asset is ready.
@@ -34,7 +34,7 @@ A good short is one idea that opens on a hook and resolves inside the clip; neve
 
 ## Paid steps: quote, agree, run
 1. Call the paid tool once WITHOUT `maxCredits`, with a new `idempotencyKey`. The answer is a quote; nothing is charged.
-2. Show the person the credits it will use and their balance (`usage_get`, if available). Wait for a clear yes.
+2. The quote carries the credits and the workspace balance. Show the person both and wait for a clear yes.
 3. Call it again with the same inputs, `maxCredits` equal to the quoted credits and the SAME `idempotencyKey`.
 4. For a `jobId`, poll `jobs_get` until `done`, `failed`, `cancelled` or `qa_failed`; only `done` is success. Never resubmit because a response or a poll failed; a retry reuses the same key.
 
