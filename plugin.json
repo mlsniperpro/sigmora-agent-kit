@@ -1,0 +1,90 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "sigmora",
+  "version": "1.0.0",
+  "description": "Edit, caption, render and schedule short-form video from a conversation. Your assistant plans and writes; Sigmora does the media work in your own Sigmora workspace.",
+  "author": {
+    "name": "Sigmora",
+    "email": "support@sigmora.org",
+    "url": "https://sigmora.org"
+  },
+  "homepage": "https://sigmora.org/chatgpt",
+  "license": "UNLICENSED",
+  "keywords": ["video", "editing", "captions", "shorts", "scheduling", "content"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Sigmora",
+        "shortDescription": "Edit, caption and post video",
+        "longDescription": "Sigmora turns your conversation into finished short-form video. Bring in footage from a file or a link, and Sigmora finds the moments worth cutting, edits out filler words and long pauses, adds captions, reshapes clips for TikTok, Reels and Shorts, and posts or schedules them to the social accounts you connected.\n\nYou stay in control. Edits come back as proposals you approve before anything renders, every paid step shows its cost and your balance before it runs, and nothing is posted until you confirm the account, caption and time.\n\nYour assistant does the planning and writing, guided by Sigmora's playbooks for hooks, scripts, captions and platform copy. Sigmora does the media work in your own Sigmora workspace, using your existing account and credits. Fine-tune any project in the Sigmora editor at sigmora.org.",
+        "developerName": "Sigmora",
+        "category": "Productivity",
+        "capabilities": ["Interactive", "Write"],
+        "websiteURL": "https://sigmora.org/chatgpt",
+        "supportURL": "https://sigmora.org/help",
+        "privacyPolicyURL": "https://sigmora.org/privacy",
+        "termsOfServiceURL": "https://sigmora.org/terms",
+        "defaultPrompt": [
+          "Cut my podcast episode into three 45-second vertical shorts with captions.",
+          "Remove the ums and long pauses from my latest video.",
+          "Schedule my finished clip to TikTok for tomorrow at 9am."
+        ],
+        "brandColor": "#D66428",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Shorts from a long video",
+              "prompt": "Cut this 20-minute podcast into three 45-second vertical shorts.",
+              "tools_triggered": "assets_import, video_moments, video_edit, jobs_get",
+              "expected_behavior": "Imports the attached podcast, finds the strongest moments, quotes the edit with the credit cost and balance, and after the reviewer agrees starts the edit and reports the job until the cuts are ready for approval."
+            },
+            {
+              "description": "Clean up filler words",
+              "prompt": "Take my last upload and remove the ums and long pauses.",
+              "tools_triggered": "projects_list, video_edit, jobs_get",
+              "expected_behavior": "Finds the latest project, quotes a filler-and-pause cleanup edit, and after approval returns a review-ready cut."
+            },
+            {
+              "description": "Captions and target length",
+              "prompt": "Add captions to my project and make it 60 seconds.",
+              "tools_triggered": "projects_list, video_edit, jobs_get",
+              "expected_behavior": "Quotes a captioned edit trimmed to about 60 seconds and, after approval, starts it and reports progress."
+            },
+            {
+              "description": "Schedule a post",
+              "prompt": "Schedule this video to TikTok for tomorrow 9am.",
+              "tools_triggered": "publish_destinations_list, publish_artifact",
+              "expected_behavior": "Lists the connected TikTok account, confirms account, caption and time with the reviewer, then schedules the post and reports it as scheduled or pending approval."
+            },
+            {
+              "description": "Clips with hooks from a YouTube link",
+              "prompt": "Turn this YouTube link into five short clips with hooks.",
+              "tools_triggered": "playbook_get, assets_import, video_moments, video_edit",
+              "expected_behavior": "Imports the link, picks five moments, writes a hook for each following Sigmora's playbook, and quotes the edit before running it."
+            }
+          ],
+          "negative": [
+            {
+              "description": "General knowledge",
+              "prompt": "Explain how video codecs work."
+            },
+            {
+              "description": "Unrelated writing",
+              "prompt": "Write a poem about the sea."
+            },
+            {
+              "description": "Another product",
+              "prompt": "How do I edit a photo in Photoshop?"
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "Sigmora sells nothing inside ChatGPT. Media work draws on the credits of the person's existing Sigmora account; plans are described and managed on sigmora.org."
+      }
+    }
+  }
+}
