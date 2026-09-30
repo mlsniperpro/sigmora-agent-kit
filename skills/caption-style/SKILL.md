@@ -20,7 +20,7 @@ Default choice: talking-head short, `bold` or `active-word`; brand or founder pi
 
 ## Apply it
 - New edit from raw footage: `video_edit` with `settings.captions: true` and `settings.captionPreset` (editorial, clean, bold, active-word or subtle).
-- An existing project: `sigma_turn` (mode `review`) with "burn in captions, <look> look", then `sigma_apply` on the proposal. Use `edit_add_captions` instead if available.
+- An existing project: `edit_add_captions` with the look as `captionPreset`, show the proposal, then `sigma_apply` on it.
 - Captions in other languages: `text_localize` (priced per language-minute).
 
 ## Placement

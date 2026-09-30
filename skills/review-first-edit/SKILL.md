@@ -14,10 +14,10 @@ Find the project with `projects_list` or make one with `projects_create`, and pa
 
 ## Targeted edits on a project
 ("cut the part about pricing", "tighten the pauses", "remove the ums", "make it 60 seconds", "add captions", "put B-roll over the intro")
-1. If available, use the matching tool: `edit_cut_ranges`, `edit_remove_fillers`, `edit_tighten_pauses`, `edit_trim_to_length`, `edit_add_captions`, `edit_place_broll`. Otherwise call `sigma_turn` with mode `review`, the `projectId`, and one plain message carrying the person's own words. Put every edit from one request in ONE message.
+1. Use the matching tool: `edit_cut_ranges`, `edit_remove_fillers`, `edit_tighten_pauses`, `edit_trim_to_length`, `edit_add_captions`, `edit_place_broll`. To cut by what was said, read `assets_transcript_get` first and pass the exact phrases or source ranges. An edit none of these covers is finished in the Sigmora editor: give the project link.
 2. Show each returned proposal: what changes, where, and the new length. Repeat counts exactly as returned (fillers removed, pauses shortened).
 3. Apply only what they accept: `sigma_apply` with each proposal unchanged (free).
-4. Paid work comes back under `approvals` with its quote. Show credits and balance, get a yes, then `sigma_approve` with the approval unchanged and one `idempotencyKey`. At most one paid step per reply.
+4. Paid work (a render, new media) is its own tool and follows the quote rule below. At most one paid step per reply.
 5. Undo: `sigma_revert` with that reply's `turnIds` (free).
 
 ## A full edit from raw footage

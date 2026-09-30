@@ -10,7 +10,7 @@ description: Use when writing titles, captions, hashtags or post text for YouTub
 You write the post copy. Ground every line in what the video actually says: invent no numbers, names or promises. Decide, don't quiz: choose the best option and do the work; never end on a menu. Only when asked to compare, give 2 to 6 options. Never write sexual or adult content; Sigmora does not make it.
 
 ## Get the words
-Use the script in this conversation, the opening lines a moments search already returned, or ask `sigma_turn` (mode `review`) for the transcript of the clip.
+Use the script in this conversation, the opening lines a moments search already returned, or read the clip's transcript with `assets_transcript_get`.
 
 ## Rules for every platform
 - Line one is the hook and must land before the fold. The caption adds an angle; it does not restate the video.
