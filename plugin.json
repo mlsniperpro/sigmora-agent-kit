@@ -25,9 +25,9 @@
         "privacyPolicyURL": "https://sigmora.org/privacy",
         "termsOfServiceURL": "https://sigmora.org/terms",
         "defaultPrompt": [
-          "Cut my podcast episode into three 45-second vertical shorts with captions.",
-          "Remove the ums and long pauses from my latest video.",
-          "Schedule my finished clip to TikTok for tomorrow at 9am."
+          "Cut my latest podcast episode into three 45-second vertical shorts with captions.",
+          "Take my last upload and remove the ums and long pauses.",
+          "Schedule the finished clip to TikTok and Reels for tomorrow at 9am."
         ],
         "brandColor": "#D66428",
         "composerIcon": "./assets/icon.png",
@@ -38,31 +38,25 @@
           "positive": [
             {
               "description": "Shorts from a long video",
-              "prompt": "Cut this 20-minute podcast into three 45-second vertical shorts with captions.",
-              "tools_triggered": "assets_import, video_moments, video_edit, jobs_get",
-              "expected_behavior": "Imports the attached podcast, finds the strongest moments, quotes the edit with the credit cost and balance, and after the reviewer agrees starts the edit and reports the job until the cuts are ready for approval."
+              "prompt": "Cut my latest podcast episode into three 45-second vertical shorts with captions.",
+              "tools_triggered": "projects_list, assets_list, video_moments, video_edit, jobs_get",
+              "expected_behavior": "Finds the latest podcast episode in the reviewer's workspace, quotes finding the strongest moments with the credit cost and balance, then quotes the edit the same way, and after the reviewer agrees to each starts it and reports the job until the cuts are ready for approval."
             },
             {
               "description": "Clean up filler words and pauses",
               "prompt": "Take my last upload and remove the ums and long pauses.",
-              "tools_triggered": "projects_list, edit_remove_fillers, edit_tighten_pauses, sigma_apply",
-              "expected_behavior": "Finds the latest project, proposes removing the filler words and tightening the long pauses without changing anything yet, shows the proposals, and applies them only after the reviewer agrees. Both edits are free and can be undone."
+              "tools_triggered": "projects_list, edit_remove_fillers, sigma_apply, edit_tighten_pauses, sigma_apply",
+              "expected_behavior": "Finds the latest project, proposes removing the filler words without changing anything yet, and applies it only after the reviewer agrees, before it proposes the next edit. Then it proposes tightening the long pauses on the updated edit and applies that after the reviewer agrees. Both edits are free and can be undone."
             },
             {
               "description": "Captions and target length",
               "prompt": "Add captions to my project and make it 60 seconds.",
-              "tools_triggered": "projects_list, edit_trim_to_length, edit_add_captions, sigma_apply",
-              "expected_behavior": "Finds the project, proposes trimming it to about 60 seconds and adding captions, shows the projected length, and applies the proposals only after the reviewer agrees. Both edits are free and can be undone."
-            },
-            {
-              "description": "A finished video file",
-              "prompt": "Make a finished 60-second cut of my latest video that I can download.",
-              "tools_triggered": "projects_list, assets_list, video_edit, jobs_get",
-              "expected_behavior": "Finds the latest video, quotes a rendered 60-second cut with the credit cost and balance, and after the reviewer agrees starts it and reports the job until the video is ready to play and download."
+              "tools_triggered": "projects_list, edit_trim_to_length, sigma_apply, edit_add_captions, sigma_apply",
+              "expected_behavior": "Finds the project, proposes trimming it to about 60 seconds with the projected length, and applies it only after the reviewer agrees, before it proposes the next edit. Then it proposes captions on the trimmed edit and applies them after the reviewer agrees. Both edits are free and can be undone."
             },
             {
               "description": "Clips with hooks from a YouTube link",
-              "prompt": "Turn this YouTube link into five short clips with hooks.",
+              "prompt": "Turn this YouTube link into five short clips with hooks: https://www.youtube.com/watch?v=iG9CE55wbtY",
               "tools_triggered": "playbook_get, assets_import, video_moments, video_edit",
               "expected_behavior": "Imports the link, picks five moments, writes a hook for each following Sigmora's playbook, and quotes the edit before running it."
             },
