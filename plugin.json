@@ -38,9 +38,9 @@
           "positive": [
             {
               "description": "Shorts from a long video",
-              "prompt": "Cut this 20-minute podcast into three 45-second vertical shorts with captions.",
-              "tools_triggered": "assets_import, video_moments, video_edit, jobs_get",
-              "expected_behavior": "Imports the attached podcast, finds the strongest moments, quotes the edit with the credit cost and balance, and after the reviewer agrees starts the edit and reports the job until the cuts are ready for approval."
+              "prompt": "Cut my latest podcast episode into three 45-second vertical shorts with captions.",
+              "tools_triggered": "projects_list, assets_list, video_moments, video_edit, jobs_get",
+              "expected_behavior": "Finds the latest podcast episode in the reviewer's workspace, quotes finding the strongest moments with the credit cost and balance, then quotes the edit the same way, and after the reviewer agrees to each starts it and reports the job until the cuts are ready for approval."
             },
             {
               "description": "Clean up filler words and pauses",
@@ -55,14 +55,8 @@
               "expected_behavior": "Finds the project, proposes trimming it to about 60 seconds with the projected length, and applies it only after the reviewer agrees, before it proposes the next edit. Then it proposes captions on the trimmed edit and applies them after the reviewer agrees. Both edits are free and can be undone."
             },
             {
-              "description": "A finished video file",
-              "prompt": "Make a finished 60-second cut of my latest video that I can download.",
-              "tools_triggered": "projects_list, assets_list, video_edit, jobs_get",
-              "expected_behavior": "Finds the latest video, quotes a rendered 60-second cut with the credit cost and balance, and after the reviewer agrees starts it and reports the job until the video is ready to play and download."
-            },
-            {
               "description": "Clips with hooks from a YouTube link",
-              "prompt": "Turn this YouTube link into five short clips with hooks.",
+              "prompt": "Turn this YouTube link into five short clips with hooks: https://www.youtube.com/watch?v=iG9CE55wbtY",
               "tools_triggered": "playbook_get, assets_import, video_moments, video_edit",
               "expected_behavior": "Imports the link, picks five moments, writes a hook for each following Sigmora's playbook, and quotes the edit before running it."
             },
