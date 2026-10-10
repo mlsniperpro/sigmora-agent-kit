@@ -59,7 +59,9 @@ test('uninstall removes only the owned Sigmora entry and preserves unrelated con
   assert.equal(result[0].action, 'updated');
   const removed = JSON.parse(await readFile(path, 'utf8'));
   assert.equal(removed.keep, true);
-  assert.equal(removed.mcpServers.sigmora, undefined);
+  // The install created mcpServers only to hold the Sigmora entry, so the
+  // uninstall drops it too instead of leaving an empty container behind.
+  assert.deepEqual(removed, { keep: true });
 });
 
 test('shared .mcp.json templates merge idempotently across native hosts', async (t) => {
