@@ -1,6 +1,6 @@
 {
   "name": "sigmora",
-  "version": "0.1.0+codex.20260823160643",
+  "version": "1.0.0",
   "description": "Project-first media workflows, reviewable edits, and durable Sigmora jobs from Codex.",
   "author": {
     "name": "Sigmora",
@@ -19,7 +19,7 @@
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
-    "displayName": "Sigmora Media",
+    "displayName": "Sigmora",
     "shortDescription": "Plan, review, and render media in Sigmora.",
     "longDescription": "Connect Codex to a Sigmora workspace for project-scoped media discovery, review-first editing, asynchronous jobs, and signed artifacts.",
     "developerName": "Sigmora",
@@ -36,6 +36,9 @@
       "Check the status of my Sigmora media jobs.",
       "Upload local footage to my current project."
     ],
-    "brandColor": "#7C3AED"
+    "brandColor": "#D66428",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png",
+    "supportURL": "https://sigmora.org/help"
   }
 }

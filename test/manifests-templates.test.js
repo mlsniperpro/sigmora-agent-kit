@@ -16,21 +16,12 @@ test('package is versioned ESM with Node 20 and zero runtime dependencies', asyn
   assert.equal(pkg.bin.sigmora, './bin/sigmora.js');
 });
 
-test('Codex, Claude, and ZCode manifests align with the package', async () => {
-  const pkg = await readJson('package.json');
+test('Codex, Claude, and ZCode manifests align with the root plugin.json', async () => {
+  const root = await readJson('plugin.json');
   for (const path of ['.codex-plugin/plugin.json', '.claude-plugin/plugin.json', '.zcode-plugin/plugin.json']) {
     const manifest = await readJson(path);
     assert.equal(manifest.name, 'sigmora', path);
-    if (path === '.codex-plugin/plugin.json') {
-      const escapedVersion = pkg.version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      assert.match(
-        manifest.version,
-        new RegExp(`^${escapedVersion}(?:\\+codex\\.[A-Za-z0-9][A-Za-z0-9.-]*)?$`),
-        path,
-      );
-    } else {
-      assert.equal(manifest.version, pkg.version, path);
-    }
+    assert.equal(manifest.version, root.version, path);
     assert.equal(manifest.author.name, 'Sigmora', path);
     assert.equal(manifest.homepage, 'https://docs.sigmora.org/mcp-server', path);
     assert.equal(
