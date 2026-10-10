@@ -8,7 +8,7 @@
     "url": "https://sigmora.org"
   },
   "homepage": "https://docs.sigmora.org/mcp-server",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "skills": "skills",
   "mcpServers": ".mcp.json"
 }

@@ -143,3 +143,11 @@ npm run package:check
 ## External release gates
 
 This bundle can be validated locally without production credentials. Public rollout still requires server deployment of the upload control plane, OAuth/protected-resource metadata for hosted clients, native marketplace review where applicable, provider-terms review, and recorded live-host certification against a dedicated Sigmora test workspace. Paid render and partner-credit scenarios must run only in an explicitly authorized sandbox.
+
+## Sigma skill (REST)
+
+`skills/sigmora/` drives Sigma, Sigmora's co-editor, over `/v1/sigma` with a member API key and a dependency-free Node script (`skills/sigmora/scripts/sigmora.mjs`). Install it on its own with `npx skills add https://sigmora.org/kit/sigmora-skill.zip`; sigmora.org serves that archive from the same files. It is not part of the ChatGPT bundle, where the host model is the brain and Sigmora runs no inference.
+
+## License
+
+MIT. See `LICENSE`.

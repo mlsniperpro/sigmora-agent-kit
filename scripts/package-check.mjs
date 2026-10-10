@@ -27,6 +27,9 @@ const required = [
   'templates/opencode/opencode.json',
   'templates/codex/config.toml',
   'templates/deepseek/cordis.patch.yml',
+  'skills/sigmora/SKILL.md',
+  'skills/sigmora/scripts/sigmora.mjs',
+  'LICENSE',
   'README.md',
   'package.json',
 ];

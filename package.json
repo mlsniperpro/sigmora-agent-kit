@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Portable Sigmora media skill, host MCP templates, and a safe local upload/configuration CLI.",
   "type": "module",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "engines": {
     "node": ">=20"
   },

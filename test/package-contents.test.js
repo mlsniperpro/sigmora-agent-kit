@@ -22,3 +22,15 @@ test('validation and package checks are dependency-free Node scripts', async () 
   assert.match(pkg.scripts['package:check'], /^node /);
   assert.equal(pkg.prepack, undefined);
 });
+
+test('the kit, its skills and every native manifest are MIT, with the license text shipped (S-W5-12)', async () => {
+  const pkg = JSON.parse(await readFile(join(KIT_ROOT, 'package.json'), 'utf8'));
+  assert.equal(pkg.license, 'MIT');
+  for (const manifest of ['plugin.json', '.codex-plugin/plugin.json', '.claude-plugin/plugin.json', '.zcode-plugin/plugin.json']) {
+    assert.equal(JSON.parse(await readFile(join(KIT_ROOT, manifest), 'utf8')).license, 'MIT', manifest);
+  }
+  const license = await readFile(join(KIT_ROOT, 'LICENSE'), 'utf8');
+  assert.match(license, /^MIT License\n\nCopyright \(c\) \d{4} Sigmora\n/);
+  const skill = await readFile(join(KIT_ROOT, 'skills/sigmora/SKILL.md'), 'utf8');
+  assert.match(skill, /^---\nname: sigmora\n[\s\S]*?\nlicense: MIT\n---\n/);
+});

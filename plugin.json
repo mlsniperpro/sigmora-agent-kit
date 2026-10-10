@@ -9,7 +9,7 @@
     "url": "https://sigmora.org"
   },
   "homepage": "https://sigmora.org/chatgpt",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "keywords": ["video", "editing", "captions", "shorts", "scheduling", "content"],
   "extensions": {
     "com.openai": {
