@@ -3,6 +3,7 @@ import { access, readFile, stat } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HOST_NAMES, HOSTS, KIT_ROOT, readHostTemplate } from '../lib/config.js';
+import { DERIVED_MANIFESTS, driftedManifests } from './derive-manifests.mjs';
 
 const root = KIT_ROOT;
 const errors = [];
@@ -32,28 +33,24 @@ async function exists(path) {
 
 const packageJson = await json('package.json');
 check(packageJson?.name === '@sigmora/agent-kit', 'package name must be @sigmora/agent-kit');
-check(packageJson?.version === '0.1.0', 'package version must be 0.1.0');
+check(/^\d+\.\d+\.\d+$/.test(packageJson?.version ?? ''), 'package version must be plain semver');
 check(packageJson?.type === 'module', 'package must be ESM');
 check(packageJson?.engines?.node === '>=20', 'package must require Node >=20');
 check(!packageJson?.dependencies || Object.keys(packageJson.dependencies).length === 0, 'package must have zero runtime dependencies');
 check(packageJson?.bin?.sigmora === './bin/sigmora.js', 'package must expose the sigmora CLI');
 for (const script of ['test', 'validate', 'package:check']) check(Boolean(packageJson?.scripts?.[script]), `missing package script: ${script}`);
 
+// One manifest source (S-W5-07): the host manifests derive from plugin.json.
+const rootManifest = await json('plugin.json');
+for (const path of await driftedManifests()) errors.push(`${path}: drifted from plugin.json; run node scripts/derive-manifests.mjs`);
+for (const path of DERIVED_MANIFESTS) {
+  const manifest = await json(path);
+  check(manifest?.version === rootManifest?.version, `${path}: version must equal plugin.json version`);
+}
+
 for (const manifestPath of ['.codex-plugin/plugin.json', '.claude-plugin/plugin.json', '.zcode-plugin/plugin.json']) {
   const manifest = await json(manifestPath);
   check(manifest?.name === 'sigmora', `${manifestPath}: name must be sigmora`);
-  if (manifestPath === '.codex-plugin/plugin.json') {
-    const escapedVersion = packageJson?.version?.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    check(
-      typeof escapedVersion === 'string' &&
-        new RegExp(`^${escapedVersion}(?:\\+codex\\.[A-Za-z0-9][A-Za-z0-9.-]*)?$`).test(
-          manifest?.version ?? '',
-        ),
-      `${manifestPath}: version must match package.json with only an optional Codex cachebuster`,
-    );
-  } else {
-    check(manifest?.version === packageJson?.version, `${manifestPath}: version must match package.json`);
-  }
   check(typeof manifest?.description === 'string' && manifest.description.length > 20, `${manifestPath}: description is missing`);
   check(manifest?.author?.name === 'Sigmora', `${manifestPath}: author.name must be Sigmora`);
   check(manifest?.homepage === 'https://docs.sigmora.org/mcp-server', `${manifestPath}: homepage must use the canonical MCP docs page`);
@@ -64,8 +61,10 @@ for (const manifestPath of ['.codex-plugin/plugin.json', '.claude-plugin/plugin.
   }[manifestPath];
   check(manifest?.mcpServers === expectedMcpPath, `${manifestPath}: MCP companion path is invalid`);
 }
-const zcodeTemplateManifest = await json('templates/zcode/plugin.json');
-check(zcodeTemplateManifest?.homepage === 'https://docs.sigmora.org/mcp-server', 'templates/zcode/plugin.json: homepage must use the canonical MCP docs page');
+const antigravityManifest = await json('templates/antigravity/plugin.json');
+check(antigravityManifest?.name === 'sigmora', 'templates/antigravity/plugin.json: name must be sigmora');
+check(typeof antigravityManifest?.description === 'string' && antigravityManifest.description.length > 40, 'templates/antigravity/plugin.json: description is missing');
+check(/^https:\/\//.test(antigravityManifest?.icon ?? ''), 'templates/antigravity/plugin.json: icon must be an HTTPS URL (Antigravity stages only that directory)');
 
 const codex = await json('.codex-plugin/plugin.json');
 check(Array.isArray(codex?.interface?.defaultPrompt) && codex.interface.defaultPrompt.length <= 3, 'Codex defaultPrompt must contain at most three prompts');

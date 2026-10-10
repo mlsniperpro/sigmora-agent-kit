@@ -1,0 +1,86 @@
+# Publishes @sigmora/agent-kit to npm with a provenance statement.
+#
+# This file is inert in the Sigmora monorepo (GitHub only runs workflows under
+# the repository root's .github/workflows) and becomes active in the public
+# mirror https://github.com/mlsniperpro/sigmora-agent-kit, which the
+# monorepo's mirror-agent-kit.yml fills with
+# `git subtree split --prefix plugins/sigmora`. npm refuses provenance from a
+# private source repository, so publishing happens only there.
+#
+# One-time setup in the public mirror:
+#   Option A (preferred): npm trusted publisher for @sigmora/agent-kit with
+#     repository owner `mlsniperpro`, repository `sigmora-agent-kit`, workflow
+#     `publish.yml`, and no NPM_TOKEN secret.
+#   Option B (first publish of the unclaimed name, or fallback): a granular npm
+#     token with publish rights on the @sigmora scope, stored as the mirror's
+#     NPM_TOKEN secret.
+#
+# Release: push a tag `agent-kit-v<package.json version>` (e.g.
+# agent-kit-v0.1.0) to the mirror. The tag must match the package version and
+# the version in plugin.json, or the job refuses to publish.
+
+name: Publish
+
+on:
+  push:
+    tags:
+      - "agent-kit-v*.*.*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish @sigmora/agent-kit to npm
+    # npm provenance claims the job's GitHub OIDC identity, so this stays on a
+    # GitHub-hosted runner in the public mirror.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      # Required to mint the OIDC token for the npm provenance attestation.
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          # No registry-url: setup-node would write an empty NODE_AUTH_TOKEN
+          # line that shadows the trusted-publisher OIDC exchange.
+          node-version: 24
+
+      - name: Bind the release tag to the package and manifest versions
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          node - <<'NODE'
+          const packageJson = require('./package.json');
+          const manifest = require('./plugin.json');
+          const expectedTag = `agent-kit-v${packageJson.version}`;
+          if (process.env.RELEASE_TAG !== expectedTag) {
+            throw new Error(`release tag ${process.env.RELEASE_TAG} does not match expected package tag ${expectedTag}`);
+          }
+          if (manifest.version !== packageJson.version) {
+            throw new Error(`plugin.json version ${manifest.version} does not match package.json version ${packageJson.version}`);
+          }
+          NODE
+
+      - name: Test
+        # Zero runtime dependencies: unit tests, manifest/template validation
+        # and the npm pack file-list check need no install step.
+        run: npm test
+
+      - name: Publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -n "$NPM_TOKEN" ]; then
+            npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
+          fi
+          npm publish --provenance --access public

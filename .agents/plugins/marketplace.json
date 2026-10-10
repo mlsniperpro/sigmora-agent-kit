@@ -1,0 +1,20 @@
+{
+  "name": "sigmora",
+  "interface": {
+    "displayName": "Sigmora"
+  },
+  "plugins": [
+    {
+      "name": "sigmora",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

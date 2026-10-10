@@ -30,6 +30,8 @@ const required = [
   'skills/sigmora/SKILL.md',
   'skills/sigmora/scripts/sigmora.mjs',
   'LICENSE',
+  'assets/icon.png',
+  'assets/logo.png',
   'README.md',
   'package.json',
 ];

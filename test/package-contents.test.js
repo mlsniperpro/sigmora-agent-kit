@@ -34,3 +34,13 @@ test('the kit, its skills and every native manifest are MIT, with the license te
   const skill = await readFile(join(KIT_ROOT, 'skills/sigmora/SKILL.md'), 'utf8');
   assert.match(skill, /^---\nname: sigmora\n[\s\S]*?\nlicense: MIT\n---\n/);
 });
+
+test('the scoped package publishes publicly, with provenance, from the public mirror (decision 8)', async () => {
+  const pkg = JSON.parse(await readFile(join(KIT_ROOT, 'package.json'), 'utf8'));
+  // A scoped package is private on npm unless published with public access.
+  assert.equal(pkg.publishConfig?.access, 'public');
+  assert.equal(pkg.publishConfig?.provenance, true);
+  // npm checks that the provenance source repository matches repository.url.
+  assert.equal(pkg.repository?.url, 'git+https://github.com/mlsniperpro/sigmora-agent-kit.git');
+  assert.equal(pkg.repository?.directory, undefined, 'the mirror root is the package');
+});

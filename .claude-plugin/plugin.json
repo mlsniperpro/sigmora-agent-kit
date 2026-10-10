@@ -9,7 +9,13 @@
   },
   "homepage": "https://docs.sigmora.org/mcp-server",
   "license": "MIT",
-  "keywords": ["media", "video", "editing", "mcp", "sigmora"],
+  "keywords": [
+    "media",
+    "video",
+    "editing",
+    "mcp",
+    "sigmora"
+  ],
   "skills": "./skills/",
   "mcpServers": "./templates/claude/.mcp.json"
 }

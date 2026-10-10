@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
@@ -16,21 +17,12 @@ test('package is versioned ESM with Node 20 and zero runtime dependencies', asyn
   assert.equal(pkg.bin.sigmora, './bin/sigmora.js');
 });
 
-test('Codex, Claude, and ZCode manifests align with the package', async () => {
-  const pkg = await readJson('package.json');
+test('Codex, Claude, and ZCode manifests align with the root plugin.json', async () => {
+  const root = await readJson('plugin.json');
   for (const path of ['.codex-plugin/plugin.json', '.claude-plugin/plugin.json', '.zcode-plugin/plugin.json']) {
     const manifest = await readJson(path);
     assert.equal(manifest.name, 'sigmora', path);
-    if (path === '.codex-plugin/plugin.json') {
-      const escapedVersion = pkg.version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      assert.match(
-        manifest.version,
-        new RegExp(`^${escapedVersion}(?:\\+codex\\.[A-Za-z0-9][A-Za-z0-9.-]*)?$`),
-        path,
-      );
-    } else {
-      assert.equal(manifest.version, pkg.version, path);
-    }
+    assert.equal(manifest.version, root.version, path);
     assert.equal(manifest.author.name, 'Sigmora', path);
     assert.equal(manifest.homepage, 'https://docs.sigmora.org/mcp-server', path);
     assert.equal(
@@ -47,7 +39,6 @@ test('Codex, Claude, and ZCode manifests align with the package', async () => {
   assert.equal(codex.skills, './skills/');
   assert.ok(Array.isArray(codex.interface.defaultPrompt));
   assert.ok(codex.interface.defaultPrompt.length <= 3);
-  assert.equal((await readJson('templates/zcode/plugin.json')).homepage, 'https://docs.sigmora.org/mcp-server');
 });
 
 test('every host template uses the canonical endpoint and documented non-secret auth', async () => {
@@ -115,8 +106,15 @@ test('host templates use current host-native remote MCP fields', async () => {
   assert.match(deepSeek, /transport: streamable-http/);
 });
 
-test('repository marketplace points to the native Codex plugin', async () => {
-  const marketplacePath = resolve(KIT_ROOT, '../../.agents/plugins/marketplace.json');
+// The repo-root `personal` marketplace is for local development in the
+// monorepo only (decision 9). The public mirror holds just this directory, so
+// there the file does not exist and this one check does not apply; the kit's
+// own marketplaces are walked in hosts.test.js in both places.
+const MONOREPO_MARKETPLACE = resolve(KIT_ROOT, '../../.agents/plugins/marketplace.json');
+const inMonorepo = existsSync(resolve(KIT_ROOT, '../../pnpm-workspace.yaml'));
+
+test('repository marketplace points to the native Codex plugin', { skip: !inMonorepo && 'public mirror: no monorepo marketplace' }, async () => {
+  const marketplacePath = MONOREPO_MARKETPLACE;
   const marketplace = JSON.parse(await readFile(marketplacePath, 'utf8'));
   const entry = marketplace.plugins.find((plugin) => plugin.name === 'sigmora');
   assert.ok(entry);
@@ -134,4 +132,12 @@ test('portable skill contains project, review, billing, partner, continuation, a
   }
   const contract = await readFile(join(KIT_ROOT, 'skills/sigmora-media/references/workflow-contract.md'), 'utf8');
   for (const choice of ['retry_provider', 'continue_with_sigmora', 'open_dashboard', 'cancel']) assert.match(contract, new RegExp(choice));
+});
+
+test('the README states that OAuth hosts sign in now, not after a future deployment (S-W5-04)', async () => {
+  const readme = await readFile(join(KIT_ROOT, 'README.md'), 'utf8');
+  assert.doesNotMatch(readme, /usable only after|require Sigmora's production OAuth|OAuth\/protected-resource metadata for hosted clients/);
+  assert.match(readme, /sign in through Sigmora's OAuth server/);
+  assert.match(readme, /\.claude-plugin\/marketplace\.json/);
+  assert.match(readme, /sigmora@sigmora/);
 });
