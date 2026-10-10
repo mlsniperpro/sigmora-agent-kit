@@ -41,7 +41,7 @@ Templates live under `templates/` and intentionally keep the wrapper thin:
 | Qwen Code | `qwen/settings.json` | `httpUrl` in `mcpServers` | OAuth dynamic discovery |
 | Kimi Code CLI | `kimi/mcp.json` | `bearerTokenEnvVar` | `SIGMORA_API_KEY` env |
 | DeepSeek Harness | `deepseek/cordis.patch.yml` | official `@deepseek-ai/dsh-mcp-client` row | `SIGMORA_API_KEY` env |
-| ZCode | `zcode/plugin.json`, `.mcp.json` | native ZCode plugin + HTTP MCP | `SIGMORA_API_KEY` env |
+| ZCode | `zcode/.mcp.json` (bundle manifest: `.zcode-plugin/plugin.json`) | native ZCode plugin + HTTP MCP | `SIGMORA_API_KEY` env |
 | CodeBuddy | `codebuddy/.mcp.json` | HTTP MCP | `SIGMORA_API_KEY` env |
 | Cursor | `cursor/mcp.json` | config-only remote MCP | OAuth discovery |
 | Gemini CLI | `gemini/settings.json` | config-only `httpUrl` MCP | OAuth dynamic discovery |

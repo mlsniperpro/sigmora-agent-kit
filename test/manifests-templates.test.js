@@ -47,7 +47,6 @@ test('Codex, Claude, and ZCode manifests align with the package', async () => {
   assert.equal(codex.skills, './skills/');
   assert.ok(Array.isArray(codex.interface.defaultPrompt));
   assert.ok(codex.interface.defaultPrompt.length <= 3);
-  assert.equal((await readJson('templates/zcode/plugin.json')).homepage, 'https://docs.sigmora.org/mcp-server');
 });
 
 test('every host template uses the canonical endpoint and documented non-secret auth', async () => {

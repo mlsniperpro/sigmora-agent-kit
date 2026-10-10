@@ -64,8 +64,10 @@ for (const manifestPath of ['.codex-plugin/plugin.json', '.claude-plugin/plugin.
   }[manifestPath];
   check(manifest?.mcpServers === expectedMcpPath, `${manifestPath}: MCP companion path is invalid`);
 }
-const zcodeTemplateManifest = await json('templates/zcode/plugin.json');
-check(zcodeTemplateManifest?.homepage === 'https://docs.sigmora.org/mcp-server', 'templates/zcode/plugin.json: homepage must use the canonical MCP docs page');
+const antigravityManifest = await json('templates/antigravity/plugin.json');
+check(antigravityManifest?.name === 'sigmora', 'templates/antigravity/plugin.json: name must be sigmora');
+check(typeof antigravityManifest?.description === 'string' && antigravityManifest.description.length > 40, 'templates/antigravity/plugin.json: description is missing');
+check(/^https:\/\//.test(antigravityManifest?.icon ?? ''), 'templates/antigravity/plugin.json: icon must be an HTTPS URL (Antigravity stages only that directory)');
 
 const codex = await json('.codex-plugin/plugin.json');
 check(Array.isArray(codex?.interface?.defaultPrompt) && codex.interface.defaultPrompt.length <= 3, 'Codex defaultPrompt must contain at most three prompts');
