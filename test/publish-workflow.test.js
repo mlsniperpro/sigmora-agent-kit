@@ -16,11 +16,49 @@ test('the mirror publishes on an agent-kit tag with npm provenance (decision 8)'
   assert.match(workflow, /expectedTag = `agent-kit-v\$\{packageJson\.version\}`/);
   assert.match(workflow, /manifest\.version !== packageJson\.version/);
   assert.match(workflow, /run: npm test/);
-  assert.match(workflow, /npm publish --provenance --access public/);
   // setup-node's registry-url would shadow the trusted-publisher exchange.
   assert.doesNotMatch(workflow, /^\s+registry-url:/m);
   assert.match(workflow, /if \[ -n "\$NPM_TOKEN" \]; then/);
   for (const uses of workflow.match(/uses: \S+/g) ?? []) assert.match(uses, /@[0-9a-f]{40}$/, `${uses} must pin a commit`);
+});
+
+// Splits a workflow into its jobs and each job into its steps, by indentation
+// (the kit has zero dependencies, so no YAML parser).
+function workflowJobs(text) {
+  const body = text.slice(text.indexOf('\njobs:\n') + 7);
+  const jobs = {};
+  for (const block of body.split(/^(?= {2}[A-Za-z][\w-]*:\n)/m)) {
+    const name = block.match(/^ {2}([A-Za-z][\w-]*):\n/)?.[1];
+    if (!name) continue;
+    const stepsAt = block.indexOf('\n    steps:\n');
+    jobs[name] = {
+      head: stepsAt === -1 ? block : block.slice(0, stepsAt),
+      steps: stepsAt === -1 ? [] : block.slice(stepsAt).split(/^ {6}- /m).slice(1),
+    };
+  }
+  return jobs;
+}
+
+test('publish credentials never meet an install or the kit test run (W5R1-MONEY-AUTH-01)', async () => {
+  const workflow = await readFile(join(KIT_ROOT, '.github/workflows/publish.yml'), 'utf8');
+  const jobs = workflowJobs(workflow);
+  // The kit has zero dependencies: nothing is ever installed in the release.
+  assert.doesNotMatch(workflow, /npm (install|ci|i)\b|pnpm|yarn/);
+  assert.deepEqual(
+    Object.entries(jobs).filter(([, job]) => /id-token: write/.test(job.head)).map(([name]) => name),
+    ['publish'],
+  );
+  for (const [name, job] of Object.entries(jobs)) {
+    if (name === 'publish') continue;
+    assert.doesNotMatch(job.head + job.steps.join(''), /id-token|NPM_TOKEN|NODE_AUTH_TOKEN|secrets\./, name);
+  }
+  const publish = jobs.publish.steps;
+  assert.doesNotMatch(publish.join(''), /npm run|npm test|actions\/checkout/);
+  const test = jobs.test.steps.join('');
+  assert.ok(test.indexOf('run: npm test') !== -1 && test.indexOf('run: npm test') < test.indexOf('npm pack --ignore-scripts'));
+  assert.match(jobs.publish.head, /needs: test/);
+  assert.deepEqual(publish.filter((step) => /NPM_TOKEN/.test(step)), [publish.at(-1)]);
+  assert.match(publish.at(-1), /npm publish "\$tarball" --provenance --access public --ignore-scripts/);
 });
 
 test('the monorepo mirrors plugins/sigmora with a deploy key and skips without it', monorepoOnly, async () => {

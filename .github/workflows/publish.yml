@@ -7,6 +7,12 @@
 # `git subtree split --prefix plugins/sigmora`. npm refuses provenance from a
 # private source repository, so publishing happens only there.
 #
+# Supply chain: the kit has zero dependencies, so nothing is ever installed.
+# The `test` job runs the kit's tests and packs the tarball with read-only
+# permissions and no secret. The `publish` job alone holds `id-token: write`;
+# it checks nothing out, runs no package script, and writes the npm token
+# (when one is set) only in its final step, which publishes that tarball.
+#
 # One-time setup in the public mirror:
 #   Option A (preferred): npm trusted publisher for @sigmora/agent-kit with
 #     repository owner `mlsniperpro`, repository `sigmora-agent-kit`, workflow
@@ -34,15 +40,13 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  publish:
-    name: Publish @sigmora/agent-kit to npm
-    # npm provenance claims the job's GitHub OIDC identity, so this stays on a
-    # GitHub-hosted runner in the public mirror.
+  test:
+    name: Test and pack @sigmora/agent-kit
+    # npm provenance claims the publish job's GitHub OIDC identity, so the
+    # release stays on GitHub-hosted runners in the public mirror.
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      # Required to mint the OIDC token for the npm provenance attestation.
-      id-token: write
       contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -51,8 +55,6 @@ jobs:
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          # No registry-url: setup-node would write an empty NODE_AUTH_TOKEN
-          # line that shadows the trusted-publisher OIDC exchange.
           node-version: 24
 
       - name: Bind the release tag to the package and manifest versions
@@ -76,11 +78,49 @@ jobs:
         # and the npm pack file-list check need no install step.
         run: npm test
 
+      - name: Pack
+        run: |
+          mkdir -p "$RUNNER_TEMP/package"
+          npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP/package"
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: package
+          path: ${{ runner.temp }}/package/*.tgz
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    name: Publish @sigmora/agent-kit to npm
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      # Required to mint the OIDC token for the npm provenance attestation
+      # (and the trusted-publisher exchange).
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          # No registry-url: setup-node would write an empty NODE_AUTH_TOKEN
+          # line that shadows the trusted-publisher OIDC exchange.
+          node-version: 24
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: package
+          path: ${{ runner.temp }}/package
+
       - name: Publish
+        # With a trusted publisher NPM_TOKEN stays unset and npm uses the OIDC
+        # exchange instead. The tarball is published as packed.
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          set -euo pipefail
+          tarball="$(ls "$RUNNER_TEMP"/package/*.tgz)"
           if [ -n "$NPM_TOKEN" ]; then
             npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
           fi
-          npm publish --provenance --access public
+          npm publish "$tarball" --provenance --access public --ignore-scripts
