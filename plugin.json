@@ -25,9 +25,9 @@
         "privacyPolicyURL": "https://sigmora.org/privacy",
         "termsOfServiceURL": "https://sigmora.org/terms",
         "defaultPrompt": [
-          "Cut my podcast episode into three 45-second vertical shorts with captions.",
-          "Remove the ums and long pauses from my latest video.",
-          "Schedule my finished clip to TikTok for tomorrow at 9am."
+          "Cut my latest podcast episode into three 45-second vertical shorts with captions.",
+          "Take my last upload and remove the ums and long pauses.",
+          "Schedule the finished clip to TikTok and Reels for tomorrow at 9am."
         ],
         "brandColor": "#D66428",
         "composerIcon": "./assets/icon.png",
