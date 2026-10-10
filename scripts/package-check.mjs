@@ -1,6 +1,7 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { KIT_ROOT } from '../lib/config.js';
+import { chatgptPackageFiles } from './package-chatgpt.mjs';
 
 const execFileAsync = promisify(execFile);
 const { stdout } = await execFileAsync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], {
@@ -34,6 +35,11 @@ const required = [
   'assets/logo.png',
   'README.md',
   'package.json',
+  // The ChatGPT app ZIP rebuilds from the tarball (npm run package:chatgpt):
+  // its packager and every file it packages, root plugin.json and mcp.json
+  // included.
+  'scripts/package-chatgpt.mjs',
+  ...chatgptPackageFiles(),
 ];
 const missing = required.filter((path) => !names.has(path));
 const forbidden = [...names].filter((path) => path.startsWith('test/') || path.endsWith('.bak') || /(?:^|\/)\.env(?:\.|$)/.test(path));

@@ -27,6 +27,8 @@
     ".claude-plugin/",
     ".zcode-plugin/",
     ".mcp.json",
+    "plugin.json",
+    "mcp.json",
     "assets/",
     "bin/",
     "examples/",

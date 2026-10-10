@@ -6,7 +6,8 @@ import { KIT_ROOT } from '../lib/config.js';
 
 test('package allowlist includes all production components and excludes tests', async () => {
   const pkg = JSON.parse(await readFile(join(KIT_ROOT, 'package.json'), 'utf8'));
-  for (const required of ['.codex-plugin/', '.claude-plugin/', '.zcode-plugin/', '.mcp.json', 'bin/', 'lib/', 'skills/', 'rest-skill/', 'templates/', 'examples/', 'README.md']) {
+  // plugin.json and mcp.json: the ChatGPT app ZIP rebuilds from the tarball.
+  for (const required of ['.codex-plugin/', '.claude-plugin/', '.zcode-plugin/', '.mcp.json', 'plugin.json', 'mcp.json', 'assets/', 'bin/', 'lib/', 'skills/', 'rest-skill/', 'templates/', 'examples/', 'README.md']) {
     assert.ok(pkg.files.includes(required), required);
   }
   assert.equal(pkg.files.includes('test/'), false);
