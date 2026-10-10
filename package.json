@@ -4,6 +4,14 @@
   "description": "Portable Sigmora media skill, host MCP templates, and a safe local upload/configuration CLI.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mlsniperpro/sigmora-agent-kit.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "engines": {
     "node": ">=20"
   },

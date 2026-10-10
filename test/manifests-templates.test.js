@@ -133,3 +133,11 @@ test('portable skill contains project, review, billing, partner, continuation, a
   const contract = await readFile(join(KIT_ROOT, 'skills/sigmora-media/references/workflow-contract.md'), 'utf8');
   for (const choice of ['retry_provider', 'continue_with_sigmora', 'open_dashboard', 'cancel']) assert.match(contract, new RegExp(choice));
 });
+
+test('the README states that OAuth hosts sign in now, not after a future deployment (S-W5-04)', async () => {
+  const readme = await readFile(join(KIT_ROOT, 'README.md'), 'utf8');
+  assert.doesNotMatch(readme, /usable only after|require Sigmora's production OAuth|OAuth\/protected-resource metadata for hosted clients/);
+  assert.match(readme, /sign in through Sigmora's OAuth server/);
+  assert.match(readme, /\.claude-plugin\/marketplace\.json/);
+  assert.match(readme, /sigmora@sigmora/);
+});

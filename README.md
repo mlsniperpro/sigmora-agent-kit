@@ -14,7 +14,7 @@ export SIGMORA_API_KEY='your-workspace-key'
 
 The Agent Kit never accepts an API key as a command argument and never writes it into configuration. Environment-authenticated templates contain only each host's environment-variable reference; OAuth-capable templates contain no API-key header. The CLI does not read or forward model-provider or partner credentials.
 
-OAuth-discovery templates are usable only after Sigmora's production protected-resource metadata advertises an authorization server. Environment-authenticated hosts and the local upload CLI use the workspace API key.
+OAuth-discovery hosts (Antigravity, Qwen Code, Cursor, Gemini CLI) sign in through Sigmora's OAuth server: `https://api.sigmora.org/mcp` advertises it in its protected-resource metadata and accepts dynamic client registration with loopback and custom-scheme redirects, so those templates carry no key. Environment-authenticated hosts and the local upload CLI use the workspace API key.
 
 Authenticated CLI traffic defaults to the canonical `https://api.sigmora.org` origin. A project-controlled `SIGMORA_API_BASE_URL` or `SIGMORA_MCP_URL` cannot redirect the bearer key to another host: any noncanonical origin, including localhost development servers, requires the separate `--allow-custom-origin` command-line acknowledgement. Treat that flag as a trust-boundary decision, not routine configuration.
 
@@ -24,9 +24,16 @@ Authenticated CLI traffic defaults to the canonical `https://api.sigmora.org` or
 - Claude Code: `.claude-plugin/plugin.json`, `templates/claude/.mcp.json`, and the portable skill.
 - ZCode: `.zcode-plugin/plugin.json`, `templates/zcode/.mcp.json`, and the portable skill.
 
-The repository-local Codex marketplace is `.agents/plugins/marketplace.json`. A repository marketplace must be added explicitly before installing `sigmora@personal`; Codex's default personal marketplace behavior applies only to the marketplace under the user's home directory.
+This directory is also a marketplace for both hosts, each listing one `sigmora` plugin whose source is `./` (the directory itself):
 
-Claude Code can test the bundle directly with its local plugin-directory option. ZCode can import the repository marketplace or plugin directory from its Plugins UI.
+- Claude Code: `.claude-plugin/marketplace.json`. Add it with `/plugin marketplace add <this repository or directory>`, then `/plugin install sigmora@sigmora`.
+- Codex: `.agents/plugins/marketplace.json`. Add it with Codex's marketplace add command for this repository or directory, then install `sigmora` from the `sigmora` marketplace.
+
+The public copy of this directory is the agent-kit mirror repository, which `.github/workflows/mirror-agent-kit.yml` in the Sigmora monorepo fills with `git subtree split`. Inside the monorepo, the repository-root `.agents/plugins/marketplace.json` (`personal`) remains for local development only.
+
+The host manifests derive their name, version, author, license and (for Codex) brand and icons from the root `plugin.json`: edit that file, then run `node scripts/derive-manifests.mjs`. `npm run validate` fails when they drift.
+
+Claude Code can also test the bundle directly with its local plugin-directory option. ZCode can import the marketplace or plugin directory from its Plugins UI.
 
 ## Configuration templates
 
@@ -46,7 +53,7 @@ Templates live under `templates/` and intentionally keep the wrapper thin:
 | Cursor | `cursor/mcp.json` | config-only remote MCP | OAuth discovery |
 | Gemini CLI | `gemini/settings.json` | config-only `httpUrl` MCP | OAuth dynamic discovery |
 
-Cursor and Gemini are config-only fallbacks, not marketplace packages. Antigravity, Qwen, Cursor, and Gemini require Sigmora's production OAuth/protected-resource metadata; their templates deliberately avoid undocumented environment interpolation in remote authorization headers.
+Cursor and Gemini are config-only fallbacks, not marketplace packages. Antigravity, Qwen, Cursor, and Gemini sign in with OAuth, discovered from the MCP endpoint's protected-resource metadata (`sigmora doctor --host <host> --network` checks it); their templates deliberately avoid undocumented environment interpolation in remote authorization headers.
 
 ## Safe configuration
 
@@ -128,6 +135,10 @@ For one-off creator-led product videos, the MCP surface also exposes the outcome
 
 See `examples/` for local upload, review-first editing, provider-limit continuation, partner handling, and the non-secret project-binding shape. A real `.sigmora/project.json` binding should remain uncommitted.
 
+## Publishing
+
+`@sigmora/agent-kit` publishes from the public mirror, never from the private monorepo, because npm attaches a provenance statement only for a public source repository. The mirror carries `.github/workflows/publish.yml` (this directory's copy is inert in the monorepo): pushing a tag `agent-kit-v<package.json version>` to the mirror runs the kit's tests and `npm publish --provenance --access public`. Configure an npm trusted publisher for the mirror's `publish.yml`, or an `NPM_TOKEN` secret in the mirror for the first publish.
+
 ## Package verification
 
 From this directory:
@@ -142,7 +153,7 @@ npm run package:check
 
 ## External release gates
 
-This bundle can be validated locally without production credentials. Public rollout still requires server deployment of the upload control plane, OAuth/protected-resource metadata for hosted clients, native marketplace review where applicable, provider-terms review, and recorded live-host certification against a dedicated Sigmora test workspace. Paid render and partner-credit scenarios must run only in an explicitly authorized sandbox.
+This bundle can be validated locally without production credentials. Public rollout still requires server deployment of the upload control plane, native marketplace review where applicable, provider-terms review, and recorded live-host certification against a dedicated Sigmora test workspace. Paid render and partner-credit scenarios must run only in an explicitly authorized sandbox.
 
 ## Sigma skill (REST)
 
