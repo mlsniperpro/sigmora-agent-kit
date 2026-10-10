@@ -33,6 +33,7 @@
     "lib/",
     "scripts/",
     "skills/",
+    "rest-skill/",
     "templates/",
     "README.md"
   ],

@@ -157,7 +157,7 @@ This bundle can be validated locally without production credentials. Public roll
 
 ## Sigma skill (REST)
 
-`skills/sigmora/` drives Sigma, Sigmora's co-editor, over `/v1/sigma` with a member API key and a dependency-free Node script (`skills/sigmora/scripts/sigmora.mjs`). Install it on its own with `npx skills add https://sigmora.org/kit/sigmora-skill.zip`; sigmora.org serves that archive from the same files. It is not part of the ChatGPT bundle, where the host model is the brain and Sigmora runs no inference.
+`rest-skill/sigmora/` drives Sigma, Sigmora's co-editor, over `/v1/sigma` with a member API key and a dependency-free Node script (`rest-skill/sigmora/scripts/sigmora.mjs`). It sits outside `skills/` on purpose: the Claude Code, Codex and ZCode plugins load everything in `skills/` (the seven playbooks and `sigmora-media`), and this skill needs `SIGMORA_API_KEY` and bills each Sigma turn, which an OAuth MCP install never does. Install it on its own with `npx skills add https://sigmora.org/kit/sigmora-skill.zip`; sigmora.org serves that archive from the same files. It is not part of the ChatGPT bundle, where the host model is the brain and Sigmora runs no inference.
 
 ## License
 

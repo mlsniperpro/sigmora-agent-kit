@@ -100,7 +100,7 @@ test('Codex, Claude Code and ZCode load skills, MCP and icons from the plugin ro
     assert.equal(typeof manifest.skills, 'string', path);
     assert.equal(typeof manifest.mcpServers, 'string', path);
     const skills = await assertSkillsDirectory(KIT_ROOT, manifest.skills, path);
-    for (const expected of ['sigmora-media', 'sigmora']) assert.ok(skills.includes(expected), `${path}: ${expected}`);
+    assert.ok(skills.includes('sigmora-media'), `${path}: sigmora-media`);
     await assertMcpFile(KIT_ROOT, manifest.mcpServers, path);
   }
   const codex = await kitJson('.codex-plugin/plugin.json');
@@ -115,6 +115,40 @@ test('Codex, Claude Code and ZCode load skills, MCP and icons from the plugin ro
     assert.ok(await isFile(resolve(KIT_ROOT, rootInterface[field])), `plugin.json ${field}`);
   }
   assert.equal((await kitJson('mcp.json')).mcpServers.sigmora.url, MCP_URL);
+});
+
+// What a native host (Claude Code, Codex, ZCode) loads: the playbooks and the
+// MCP media skill, nothing else. Claude Code auto-discovers `skills/` at the
+// plugin root whatever the manifest says, so the paid REST `sigmora` skill
+// (SIGMORA_API_KEY, Sigma turns billed as inference) lives in `rest-skill/`,
+// outside every native skills root (W5R1-REGRESSION-01).
+const NATIVE_SKILLS = [
+  'caption-style',
+  'hook-adaptation',
+  'platform-copy',
+  'repurpose-long-video',
+  'review-first-edit',
+  'short-form-script',
+  'sigmora-media',
+  'weekly-content-plan',
+];
+
+test('every native host loads exactly the 7 playbooks and sigmora-media, never the REST skill (W5R1-REGRESSION-01)', async () => {
+  const autoDiscovered = (await readdir(join(KIT_ROOT, 'skills'), { withFileTypes: true }))
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort();
+  assert.deepEqual(autoDiscovered, NATIVE_SKILLS, 'skills/ is auto-discovered by Claude Code; it holds only the native skill set');
+  for (const path of NATIVE_MANIFESTS) {
+    const manifest = await kitJson(path);
+    assert.equal(resolve(KIT_ROOT, manifest.skills), join(KIT_ROOT, 'skills'), `${path}: skills root`);
+    assert.deepEqual((await assertSkillsDirectory(KIT_ROOT, manifest.skills, path)).sort(), NATIVE_SKILLS, path);
+  }
+  for (const path of [...await listPluginManifests(), '.claude-plugin/marketplace.json', '.agents/plugins/marketplace.json']) {
+    assert.doesNotMatch(await readFile(join(KIT_ROOT, path), 'utf8'), /rest-skill/, `${path} must not load the REST skill`);
+  }
+  assert.ok(await isFile(join(KIT_ROOT, 'rest-skill/sigmora/SKILL.md')), 'the REST skill keeps one home in rest-skill/sigmora');
+  assert.ok(await isFile(join(KIT_ROOT, 'rest-skill/sigmora/scripts/sigmora.mjs')), 'rest-skill/sigmora/scripts/sigmora.mjs');
 });
 
 test('the Codex interface and every host manifest derive from the root plugin.json (S-W5-07)', async () => {

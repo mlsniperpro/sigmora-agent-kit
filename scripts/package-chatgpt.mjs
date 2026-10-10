@@ -9,9 +9,10 @@
  * the same bytes.
  *
  * What goes in is an explicit allowlist (plugin.json, mcp.json, assets/**, the
- * seven playbooks and the sigmora-media skill). The `sigmora` REST skill is
- * never packaged: it drives Sigma turns, and the ChatGPT door is host-brain
- * with no inference of its own. There is no `.app.json` in this format.
+ * seven playbooks and the sigmora-media skill). The `sigmora` REST skill
+ * (rest-skill/sigmora, outside skills/) is never packaged: it drives Sigma
+ * turns, and the ChatGPT door is host-brain with no inference of its own.
+ * There is no `.app.json` in this format.
  *
  * Usage: node scripts/package-chatgpt.mjs [--out <dir>]
  */
@@ -37,7 +38,7 @@ export const CHATGPT_SKILLS = [
   'weekly-content-plan',
   'sigmora-media',
 ];
-/** Never packaged, whatever the allowlist says later. */
+/** Never packaged, whatever the allowlist says later (the REST skill's name). */
 const EXCLUDED_SKILLS = new Set(['sigmora']);
 
 function walk(relativeDir) {

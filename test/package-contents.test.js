@@ -6,7 +6,7 @@ import { KIT_ROOT } from '../lib/config.js';
 
 test('package allowlist includes all production components and excludes tests', async () => {
   const pkg = JSON.parse(await readFile(join(KIT_ROOT, 'package.json'), 'utf8'));
-  for (const required of ['.codex-plugin/', '.claude-plugin/', '.zcode-plugin/', '.mcp.json', 'bin/', 'lib/', 'skills/', 'templates/', 'examples/', 'README.md']) {
+  for (const required of ['.codex-plugin/', '.claude-plugin/', '.zcode-plugin/', '.mcp.json', 'bin/', 'lib/', 'skills/', 'rest-skill/', 'templates/', 'examples/', 'README.md']) {
     assert.ok(pkg.files.includes(required), required);
   }
   assert.equal(pkg.files.includes('test/'), false);
@@ -31,7 +31,7 @@ test('the kit, its skills and every native manifest are MIT, with the license te
   }
   const license = await readFile(join(KIT_ROOT, 'LICENSE'), 'utf8');
   assert.match(license, /^MIT License\n\nCopyright \(c\) \d{4} Sigmora\n/);
-  const skill = await readFile(join(KIT_ROOT, 'skills/sigmora/SKILL.md'), 'utf8');
+  const skill = await readFile(join(KIT_ROOT, 'rest-skill/sigmora/SKILL.md'), 'utf8');
   assert.match(skill, /^---\nname: sigmora\n[\s\S]*?\nlicense: MIT\n---\n/);
 });
 

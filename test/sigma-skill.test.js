@@ -1,7 +1,7 @@
 // node --test plugins/sigmora/test/sigma-skill.test.js
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { markFrom, parseArgs, requestFor, send } from '../skills/sigmora/scripts/sigmora.mjs';
+import { markFrom, parseArgs, requestFor, send } from '../rest-skill/sigmora/scripts/sigmora.mjs';
 
 test('a turn continues a thread in a project and carries a mark', () => {
   const { positional, flags } = parseArgs(['tighten', 'the', 'intro', '--thread', 't1', '--project', 'p1', '--mode', 'agentic', '--asset', 'a1', '--at', '12.5', '--region', '0.1,0.2,0.3,0.4', '--key', 'k1']);
