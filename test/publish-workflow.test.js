@@ -61,17 +61,23 @@ test('publish credentials never meet an install or the kit test run (W5R1-MONEY-
   assert.match(publish.at(-1), /npm publish "\$tarball" --provenance --access public --ignore-scripts/);
 });
 
-test('the monorepo mirrors plugins/sigmora with a deploy key and skips without it', monorepoOnly, async () => {
+test('the monorepo mirrors plugins/sigmora from main only, with a main-only environment key', monorepoOnly, async () => {
   const workflow = await readFile(join(REPOSITORY_ROOT, '.github/workflows/mirror-agent-kit.yml'), 'utf8');
   assert.match(workflow, /paths:\n\s+- "plugins\/sigmora\/\*\*"/);
   assert.match(workflow, /^permissions:\n  contents: read$/m);
-  assert.match(workflow, /git subtree split --prefix plugins\/sigmora --branch agent-kit-mirror/);
-  assert.match(workflow, /secrets\.AGENT_KIT_MIRROR_DEPLOY_KEY/);
-  assert.match(workflow, /::notice::AGENT_KIT_MIRROR_DEPLOY_KEY is not set/);
-  assert.match(workflow, /MIRROR_REMOTE: git@github\.com:mlsniperpro\/sigmora-agent-kit\.git/);
-  assert.match(workflow, /StrictHostKeyChecking=yes/);
-  assert.match(workflow, /git push "\$MIRROR_REMOTE" agent-kit-mirror:refs\/heads\/main\n/);
-  assert.doesNotMatch(workflow, /--force|\+agent-kit-mirror/);
+  assert.doesNotMatch(workflow, /secrets|contents: write|id-token: write/);
+  // W5R1-MONEY-AUTH-02: one reusable mirror job; only main reaches the key in
+  // the `agent-kit-mirror` environment (deployment branches: main).
+  assert.match(workflow, /^ {4}if: github\.ref == 'refs\/heads\/main'\n {4}uses: \.\/\.github\/workflows\/mirror-subtree\.yml\n/m);
+  assert.match(workflow, /^ {6}prefix: plugins\/sigmora\n/m);
+  assert.match(workflow, /^ {6}remote: git@github\.com:mlsniperpro\/sigmora-agent-kit\.git\n/m);
+  assert.match(workflow, /^ {6}environment: agent-kit-mirror\n/m);
+  assert.match(workflow, /^ {6}deploy_key_secret: AGENT_KIT_MIRROR_DEPLOY_KEY\n/m);
+  const subtree = await readFile(join(REPOSITORY_ROOT, '.github/workflows/mirror-subtree.yml'), 'utf8');
+  assert.match(subtree, /^ {4}if: github\.ref == 'refs\/heads\/main'\n/m);
+  assert.match(subtree, /^ {4}environment: \$\{\{ inputs\.environment \}\}\n/m);
+  assert.match(subtree, /git push "\$MIRROR_REMOTE" mirror-split:refs\/heads\/main\n/);
+  assert.doesNotMatch(subtree, /--force|\+mirror-split/);
   const pkg = JSON.parse(await readFile(join(KIT_ROOT, 'package.json'), 'utf8'));
   assert.equal(pkg.repository.url, 'git+https://github.com/mlsniperpro/sigmora-agent-kit.git');
 });
