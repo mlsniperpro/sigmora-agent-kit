@@ -20,9 +20,10 @@ the web app, and every turn shows up in the project's Sigma panel there.
   no install). Every command prints the JSON answer; a non-zero exit is an error
   whose `error.message` is written for a person.
 
-Install: `npx skills add mlsniperpro/sigmora-platform --skill sigmora`, or copy
-this folder (`plugins/sigmora/skills/sigmora`) into your agent's skills directory
-(`~/.claude/skills/sigmora`, `.codex/skills/sigmora`, `.cursor/skills/sigmora`).
+Install: `npx skills add https://sigmora.org/kit/sigmora-skill.zip`, or unzip
+https://sigmora.org/kit/sigmora-skill.zip into a `sigmora` folder in your
+agent's skills directory (`~/.claude/skills/sigmora`, `.codex/skills/sigmora`,
+`.cursor/skills/sigmora`).
 
 Prefer MCP? The same capabilities are MCP tools (`sigma_turn`, `sigma_approve`,
 `sigma_apply`, `sigma_revert`, `jobs_get`, `projects_get`) on
