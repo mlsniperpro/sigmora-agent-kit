@@ -45,14 +45,14 @@
             {
               "description": "Clean up filler words and pauses",
               "prompt": "Take my last upload and remove the ums and long pauses.",
-              "tools_triggered": "projects_list, edit_remove_fillers, edit_tighten_pauses, sigma_apply",
-              "expected_behavior": "Finds the latest project, proposes removing the filler words and tightening the long pauses without changing anything yet, shows the proposals, and applies them only after the reviewer agrees. Both edits are free and can be undone."
+              "tools_triggered": "projects_list, edit_remove_fillers, sigma_apply, edit_tighten_pauses, sigma_apply",
+              "expected_behavior": "Finds the latest project, proposes removing the filler words without changing anything yet, and applies it only after the reviewer agrees, before it proposes the next edit. Then it proposes tightening the long pauses on the updated edit and applies that after the reviewer agrees. Both edits are free and can be undone."
             },
             {
               "description": "Captions and target length",
               "prompt": "Add captions to my project and make it 60 seconds.",
-              "tools_triggered": "projects_list, edit_trim_to_length, edit_add_captions, sigma_apply",
-              "expected_behavior": "Finds the project, proposes trimming it to about 60 seconds and adding captions, shows the projected length, and applies the proposals only after the reviewer agrees. Both edits are free and can be undone."
+              "tools_triggered": "projects_list, edit_trim_to_length, sigma_apply, edit_add_captions, sigma_apply",
+              "expected_behavior": "Finds the project, proposes trimming it to about 60 seconds with the projected length, and applies it only after the reviewer agrees, before it proposes the next edit. Then it proposes captions on the trimmed edit and applies them after the reviewer agrees. Both edits are free and can be undone."
             },
             {
               "description": "A finished video file",
