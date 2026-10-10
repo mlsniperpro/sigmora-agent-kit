@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
@@ -105,8 +106,15 @@ test('host templates use current host-native remote MCP fields', async () => {
   assert.match(deepSeek, /transport: streamable-http/);
 });
 
-test('repository marketplace points to the native Codex plugin', async () => {
-  const marketplacePath = resolve(KIT_ROOT, '../../.agents/plugins/marketplace.json');
+// The repo-root `personal` marketplace is for local development in the
+// monorepo only (decision 9). The public mirror holds just this directory, so
+// there the file does not exist and this one check does not apply; the kit's
+// own marketplaces are walked in hosts.test.js in both places.
+const MONOREPO_MARKETPLACE = resolve(KIT_ROOT, '../../.agents/plugins/marketplace.json');
+const inMonorepo = existsSync(resolve(KIT_ROOT, '../../pnpm-workspace.yaml'));
+
+test('repository marketplace points to the native Codex plugin', { skip: !inMonorepo && 'public mirror: no monorepo marketplace' }, async () => {
+  const marketplacePath = MONOREPO_MARKETPLACE;
   const marketplace = JSON.parse(await readFile(marketplacePath, 'utf8'));
   const entry = marketplace.plugins.find((plugin) => plugin.name === 'sigmora');
   assert.ok(entry);

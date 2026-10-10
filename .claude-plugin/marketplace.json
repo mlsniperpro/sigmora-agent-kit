@@ -1,0 +1,18 @@
+{
+  "name": "sigmora",
+  "description": "Sigmora's agent kit for Claude Code: review-first media skills and the Sigmora MCP server.",
+  "owner": {
+    "name": "Sigmora",
+    "email": "support@sigmora.org",
+    "url": "https://sigmora.org"
+  },
+  "plugins": [
+    {
+      "name": "sigmora",
+      "source": "./",
+      "description": "Edit, caption, render and schedule short-form video from Claude Code with your Sigmora workspace.",
+      "category": "productivity",
+      "homepage": "https://docs.sigmora.org/mcp-server"
+    }
+  ]
+}
