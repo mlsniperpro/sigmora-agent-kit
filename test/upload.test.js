@@ -786,3 +786,30 @@ test('bounded unresolved reconciliation returns an honest pending result rather 
   assert.equal(result.recoveryPending, true);
   assert.equal(result.recoveryNextAction, 'wait');
 });
+
+for (const contentStatus of ['missing', 'deleted']) {
+  test(`a status that settles the upload as failed (${contentStatus}) is an error, not a completed upload`, async (t) => {
+    const { path } = await fixture(t);
+    const calls = [];
+    await assert.rejects(
+      testUpload({
+        filePath: path, projectId: 'prj', apiKey: 'key', retries: 0, sleep: async () => {},
+        fetchImpl: async (url, options) => {
+          const href = String(url);
+          calls.push(`${options.method} ${new URL(href).pathname}`);
+          if (href.endsWith('/prepare')) {
+            const body = JSON.parse(options.body);
+            // A replayed session whose prepare authority has expired: the CLI asks status.
+            return jsonResponse({ uploadId: 'upl_old', projectId: 'prj', assetId: 'ast_recovery', contentId: 'cnt_recovery', checksum: body.sha256, expiresAt: '2000-01-01T00:00:00.000Z', lane: 'single-put', upload: { method: 'PUT', url: 'https://storage.example/expired', headers: {} } });
+          }
+          if (href.includes('/status?')) {
+            return jsonResponse(uploadStatusBody({ nextAction: 'none', state: 'failed', contentStatus }));
+          }
+          throw new Error(`unexpected URL ${href}`);
+        },
+      }),
+      new RegExp(`upload failed.*${contentStatus}`, 'i'),
+    );
+    assert.ok(!calls.includes('PUT /expired'), 'no bytes were sent');
+  });
+}

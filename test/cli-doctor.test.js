@@ -286,3 +286,70 @@ test('CLI upload wires arguments through mocked prepare, storage PUT, and comple
   ]);
   assert.doesNotMatch(`${stdout.value()}${stderr.value()}`, /cli-secret/);
 });
+
+function uploadStatusResponse({ nextAction, state, contentStatus }, status = 200) {
+  return new Response(JSON.stringify({
+    success: true, requestedUploadId: 'upl_cli', uploadId: 'upl_cli', projectId: 'prj_cli',
+    assetId: 'ast_cli', contentId: 'cnt_cli', lane: 'single-put', state, contentStatus,
+    expiresAt: '2000-01-01T00:00:00.000Z', completedAt: null, previewUrl: null, supersededByUploadId: null,
+    recovery: { required: nextAction !== 'none', attempt: 1, leaseExpiresAt: null, nextAction, providerAttested: true },
+  }), { status, headers: { 'Content-Type': 'application/json' } });
+}
+
+function expiredPrepareResponse(options) {
+  const body = JSON.parse(options.body);
+  return new Response(JSON.stringify({
+    uploadId: 'upl_cli', projectId: 'prj_cli', assetId: 'ast_cli', contentId: 'cnt_cli',
+    lane: 'single-put', checksum: body.sha256, expiresAt: '2000-01-01T00:00:00.000Z',
+    upload: { method: 'PUT', url: 'https://storage.example/cli', headers: {} },
+  }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+}
+
+test('CLI upload exits nonzero and never says Uploaded when the server reports the upload failed', async (t) => {
+  const root = await fixture(t);
+  const filePath = join(root, 'clip.mp4');
+  await writeFile(filePath, 'media-bytes');
+  const stdout = capture();
+  const stderr = capture();
+  const code = await runCli(['upload', filePath, '--project', 'prj_cli', '--storage-host', 'storage.example', '--quiet'], {
+    stdout: stdout.stream,
+    stderr: stderr.stream,
+    env: { SIGMORA_API_KEY: 'cli-secret' },
+    cwd: root,
+    fetchImpl: async (url, options) => {
+      const href = String(url);
+      if (href.endsWith('/v1/assets/upload/prepare')) return expiredPrepareResponse(options);
+      if (href.includes('/v1/assets/upload/status?')) {
+        return uploadStatusResponse({ nextAction: 'none', state: 'failed', contentStatus: 'missing' });
+      }
+      throw new Error(`Unexpected URL ${href}`);
+    },
+  });
+  assert.notEqual(code, 0);
+  assert.doesNotMatch(stdout.value(), /Uploaded/);
+  assert.match(stderr.value(), /upload failed/i);
+});
+
+test('CLI upload text output does not call a still-reconciling upload Uploaded', async (t) => {
+  const root = await fixture(t);
+  const filePath = join(root, 'clip.mp4');
+  await writeFile(filePath, 'media-bytes');
+  const stdout = capture();
+  const code = await runCli(['upload', filePath, '--project', 'prj_cli', '--storage-host', 'storage.example', '--quiet', '--retries', '0'], {
+    stdout: stdout.stream,
+    stderr: capture().stream,
+    env: { SIGMORA_API_KEY: 'cli-secret' },
+    cwd: root,
+    fetchImpl: async (url, options) => {
+      const href = String(url);
+      if (href.endsWith('/v1/assets/upload/prepare')) return expiredPrepareResponse(options);
+      if (href.includes('/v1/assets/upload/status?')) {
+        return uploadStatusResponse({ nextAction: 'wait', state: 'finalizing', contentStatus: 'processing' }, 202);
+      }
+      throw new Error(`Unexpected URL ${href}`);
+    },
+  });
+  assert.equal(code, 0);
+  assert.doesNotMatch(stdout.value(), /^Uploaded/m);
+  assert.match(stdout.value(), /still reconciling/);
+});
