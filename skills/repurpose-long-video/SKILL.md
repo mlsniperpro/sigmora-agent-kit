@@ -18,7 +18,7 @@ Find the project with `projects_list` or make one with `projects_create`, and pa
 ## 2. Find the moments
 `video_moments` with `assetId`, `platforms` and `maxClips` (paid per transcript-minute). It scores each stretch for standing alone, hook and payoff, and returns cue-safe ranges with the exact opening line.
 - By source length: up to 8 min, about 5 clips of 25 s; up to 30 min, 8 of 40 s; longer, 8 of 55 s.
-- Platform windows: YouTube Shorts 13-60 s, TikTok 15-60, Instagram Reels 15-90, Facebook Reels 15-30, Snapchat 5-60. The strictest requested platform wins (say so when Facebook caps a clip at 30 s). Never pad a short clip.
+- Platform windows: YouTube Shorts 13 s-3 min, TikTok 15-60 s, Instagram Reels 15 s-15 min, Facebook Reels 3-90 s, Snapchat Spotlight 6-60 s. The strictest requested platform wins (say so when one platform shortens a clip, e.g. TikTok's 60 s or Facebook's 90 s). Never pad a short clip.
 
 ## 3. Choose, and show your picks
 A good short is one idea that opens on a hook and resolves inside the clip; never a teaser that needs the full video. Prefer the cold open, the central reveal, the counter-intuitive number and the human payoff. For each pick show start-end, length, the opening line verbatim and one line on why. Flag a `selectedBy: fallback` result or any warning as "needs your eye".
