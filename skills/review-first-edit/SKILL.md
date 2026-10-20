@@ -3,7 +3,7 @@ name: review-first-edit
 description: "Use when the person wants footage edited: cuts, filler words, pauses, a target length, captions, B-roll or a full edit from raw clips."
 ---
 
-<!-- Generated from apps/web/src/lib/playbooks/index.ts (playbook review-first-edit v1.0.0) by apps/web/scripts/emit-plugin-skills.ts. Edit the source, not this file. -->
+<!-- Generated from apps/web/src/lib/playbooks/index.ts (playbook review-first-edit v1.0.1) by apps/web/scripts/emit-plugin-skills.ts. Edit the source, not this file. -->
 
 # Review-first edit
 
@@ -28,7 +28,7 @@ Find the project with `projects_list` or make one with `projects_create`, and pa
 ## Rules
 - Locate edits by what was said, never by guessed timestamps; never ask the person for timestamps.
 - Never widen an edit beyond what they named, and never swap in other footage.
-- Pause tightening works on word timing, not measured silence; filler removal is English-only. Say so once.
+- Pause tightening works on word timing, not measured silence; filler removal skips transcripts in unsupported languages. Say so once.
 - Report lengths and readiness only from tool results.
 - Swapping a person, product or outfit in a shot: `video_footage` with `preview: true` first (first 4 s at 480p); the full clip only after they approve the preview.
 
