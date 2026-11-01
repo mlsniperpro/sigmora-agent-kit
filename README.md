@@ -29,7 +29,7 @@ This directory is also a marketplace for both hosts, each listing one `sigmora` 
 - Claude Code: `.claude-plugin/marketplace.json`. Add it with `/plugin marketplace add <this repository or directory>`, then `/plugin install sigmora@sigmora`.
 - Codex: `.agents/plugins/marketplace.json`. Add it with Codex's marketplace add command for this repository or directory, then install `sigmora` from the `sigmora` marketplace.
 
-The public copy of this directory is the agent-kit mirror repository, which `.github/workflows/mirror-agent-kit.yml` in the Sigmora monorepo fills with `git subtree split` from `main` only (its deploy key is `AGENT_KIT_MIRROR_DEPLOY_KEY` in the main-only `agent-kit-mirror` GitHub environment). Inside the monorepo, the repository-root `.agents/plugins/marketplace.json` (`personal`) remains for local development only.
+The public copy of this directory is the agent-kit mirror repository, which `.github/workflows/mirror-agent-kit.yml` in the Sigmora monorepo fills with `git subtree split` from `main` only. The workflow is manual only (no push trigger): run it from Actions after a change under `plugins/sigmora/` lands on `main` (its deploy key is `AGENT_KIT_MIRROR_DEPLOY_KEY` in the main-only `agent-kit-mirror` GitHub environment). Inside the monorepo, the repository-root `.agents/plugins/marketplace.json` (`personal`) remains for local development only.
 
 The host manifests derive their name, version, author, license and (for Codex) brand and icons from the root `plugin.json`: edit that file, then run `node scripts/derive-manifests.mjs`. `npm run validate` fails when they drift.
 
