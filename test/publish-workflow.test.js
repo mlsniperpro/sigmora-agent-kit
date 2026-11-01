@@ -63,7 +63,9 @@ test('publish credentials never meet an install or the kit test run (W5R1-MONEY-
 
 test('the monorepo mirrors plugins/sigmora from main only, with a main-only environment key', monorepoOnly, async () => {
   const workflow = await readFile(join(REPOSITORY_ROOT, '.github/workflows/mirror-agent-kit.yml'), 'utf8');
-  assert.match(workflow, /paths:\n\s+- "plugins\/sigmora\/\*\*"/);
+  // Manual only (GitHub Actions is for deployment only): no push, PR or schedule trigger.
+  assert.match(workflow, /^on:\n(?:\s*#.*\n)*\s+workflow_dispatch:/m);
+  assert.doesNotMatch(workflow, /^\s+(?:push|pull_request|schedule):/m);
   assert.match(workflow, /^permissions:\n  contents: read$/m);
   assert.doesNotMatch(workflow, /secrets|contents: write|id-token: write/);
   // W5R1-MONEY-AUTH-02: one reusable mirror job; only main reaches the key in
