@@ -129,11 +129,12 @@ const NATIVE_SKILLS = [
   'repurpose-long-video',
   'review-first-edit',
   'short-form-script',
+  'sigma-editor',
   'sigmora-media',
   'weekly-content-plan',
 ];
 
-test('every native host loads exactly the 7 playbooks and sigmora-media, never the REST skill (W5R1-REGRESSION-01)', async () => {
+test('every native host loads exactly the 8 playbooks and sigmora-media, never the REST skill (W5R1-REGRESSION-01)', async () => {
   const autoDiscovered = (await readdir(join(KIT_ROOT, 'skills'), { withFileTypes: true }))
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
