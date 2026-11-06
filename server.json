@@ -1,0 +1,27 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "org.sigmora/sigmora",
+  "title": "Sigmora",
+  "description": "Edit, caption, clip, render and schedule short-form video in your Sigmora workspace.",
+  "version": "0.1.0",
+  "websiteUrl": "https://www.sigmora.org",
+  "repository": {
+    "url": "https://github.com/mlsniperpro/sigmora-platform",
+    "source": "github",
+    "subfolder": "plugins/sigmora"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.sigmora.org/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer sk_live_... workspace API key from Settings, API keys. Clients that support OAuth sign in instead.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

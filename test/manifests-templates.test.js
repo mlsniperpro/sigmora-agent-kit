@@ -141,3 +141,18 @@ test('the README states that OAuth hosts sign in now, not after a future deploym
   assert.match(readme, /\.claude-plugin\/marketplace\.json/);
   assert.match(readme, /sigmora@sigmora/);
 });
+
+test('the MCP Registry server.json names the same remote, version and domain namespace', async () => {
+  const server = await readJson('server.json');
+  const root = await readJson('plugin.json');
+  const mcp = await readJson('mcp.json');
+  assert.equal(server.$schema, 'https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json');
+  // Domain namespace: proven by the TXT record or /.well-known/mcp-registry-auth on sigmora.org.
+  assert.equal(server.name, 'org.sigmora/sigmora');
+  assert.equal(server.version, root.version);
+  assert.ok(server.description.length <= 100, 'the registry caps description at 100 characters');
+  assert.equal(server.remotes.length, 1);
+  assert.equal(server.remotes[0].type, 'streamable-http');
+  assert.equal(server.remotes[0].url, mcp.mcpServers.sigmora.url);
+  assert.ok(server.remotes[0].headers.every((header) => header.isSecret === true));
+});
