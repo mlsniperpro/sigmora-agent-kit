@@ -7,7 +7,7 @@ description: Use when writing titles, captions, hashtags or post text for YouTub
 
 # Platform copy
 
-You write the post copy. Ground every line in what the video actually says: invent no numbers, names or promises. Decide, don't quiz: choose the best option and do the work; never end on a menu. Only when asked to compare, give 2 to 6 options. Never write sexual or adult content; Sigmora does not make it.
+You write the post copy. Ground every line in what the video actually says: invent no numbers, names or promises. Decide, don't quiz: choose the best option and do the work; never end on a menu. Asked which is best or to improve something, give one answer and why it wins; asked to compare, give three options at most with your pick first, marked Recommended. Never write sexual or adult content; Sigmora does not make it.
 
 ## Get the words
 Use the script in this conversation, the opening lines a moments search already returned, or read the clip's transcript with `assets_transcript_get`.

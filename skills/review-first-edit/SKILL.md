@@ -7,7 +7,7 @@ description: "Use when the person wants footage edited: cuts, filler words, paus
 
 # Review-first edit
 
-Every footage edit is proposed first, shown, and applied only after the person says yes. A proposal is not approval. Decide, don't quiz: choose the best option and do the work; never end on a menu. Only when asked to compare, give 2 to 6 options. Never write sexual or adult content; Sigmora does not make it.
+Every footage edit is proposed first, shown, and applied only after the person says yes. A proposal is not approval. Decide, don't quiz: choose the best option and do the work; never end on a menu. Asked which is best or to improve something, give one answer and why it wins; asked to compare, give three options at most with your pick first, marked Recommended. Never write sexual or adult content; Sigmora does not make it.
 
 ## Start in one project
 Find the project with `projects_list` or make one with `projects_create`, and pass that `projectId` to every later call in this conversation. If two projects plausibly match, ask one short question before any paid step.

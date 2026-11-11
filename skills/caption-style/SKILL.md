@@ -7,7 +7,7 @@ description: Use when the person wants on-screen captions or subtitles on a vide
 
 # Caption style
 
-Pick the caption look and apply it. Decide, don't quiz: choose the best option and do the work; never end on a menu. Only when asked to compare, give 2 to 6 options. Never write sexual or adult content; Sigmora does not make it.
+Pick the caption look and apply it. Decide, don't quiz: choose the best option and do the work; never end on a menu. Asked which is best or to improve something, give one answer and why it wins; asked to compare, give three options at most with your pick first, marked Recommended. Never write sexual or adult content; Sigmora does not make it.
 
 ## Choose the look
 - `editorial` (default): large phrases on one quiet rail. Premium, phone-readable, no karaoke clutter. Up to 28 characters a line.

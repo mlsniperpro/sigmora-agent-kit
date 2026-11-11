@@ -7,7 +7,7 @@ description: Use when the person wants a script for a TikTok, Reel or YouTube Sh
 
 # Short-form script
 
-You write the script; Sigmora supplies evidence and later edits the footage. Decide, don't quiz: choose the best option and do the work; never end on a menu. Only when asked to compare, give 2 to 6 options. Never write sexual or adult content; Sigmora does not make it.
+You write the script; Sigmora supplies evidence and later edits the footage. Decide, don't quiz: choose the best option and do the work; never end on a menu. Asked which is best or to improve something, give one answer and why it wins; asked to compare, give three options at most with your pick first, marked Recommended. Never write sexual or adult content; Sigmora does not make it.
 
 ## Before writing
 - Know the topic, the platform and who it is for. If one is missing and it changes the script, ask one short question.
