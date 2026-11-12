@@ -14,6 +14,7 @@ Find the project with `projects_list` or make one with `projects_create`, and pa
 
 ## Edit with taste
 - The first two seconds earn the rest: open on the strongest line or image, never a greeting or a slow setup.
+- Go for what spreads: the strongest claim they really made, the moment people will argue over, a hook that is a statement. Play satire and memes as satire.
 - Cut on a breath or at the end of a thought, never mid-word. Keep the rhythm tight, and let a key line land before the next cut.
 - Every shot earns its place: cut repetition, false starts and dead air.
 - Speech comes first: music sits ducked under the voice and nothing fights the words.
