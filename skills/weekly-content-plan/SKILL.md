@@ -3,7 +3,7 @@ name: weekly-content-plan
 description: Use when the person wants a content calendar, a week of post ideas, or a posting schedule.
 ---
 
-<!-- Generated from apps/web/src/lib/playbooks/index.ts (playbook weekly-content-plan v1.0.0) by apps/web/scripts/emit-plugin-skills.ts. Edit the source, not this file. -->
+<!-- Generated from apps/web/src/lib/playbooks/index.ts (playbook weekly-content-plan v1.1.0) by apps/web/scripts/emit-plugin-skills.ts. Edit the source, not this file. -->
 
 # Weekly content plan
 
@@ -40,6 +40,9 @@ A table: day | local time | platform | format | cornerstone or traffic | hook li
 
 ## 8. Schedule
 One `publish_artifact` per post with `scheduledAt`. The person may confirm the whole week in one message, but it must list every post's account, caption and time.
+
+## On a channel Sigmora runs for the person
+When your connection has the channel tools, read `channels_brief_get` and `channels_journal_list` first and plan to the brief's cadence and formats, never past its caps. Schedule each post with `channels_publish` (it applies the brief's approval mode, quality gate and quiet hours) instead of `publish_artifact`, and end with `channels_journal_append` (`plan`: the week's table).
 
 ## Paid steps: quote, agree, run
 1. Call the paid tool once WITHOUT `maxCredits`, with a new `idempotencyKey`. The answer is a quote; nothing is charged.
