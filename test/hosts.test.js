@@ -122,10 +122,18 @@ test('Codex, Claude Code and ZCode load skills, MCP and icons from the plugin ro
 // plugin root whatever the manifest says, so the paid REST `sigmora` skill
 // (SIGMORA_API_KEY, Sigma turns billed as inference) lives in `rest-skill/`,
 // outside every native skills root (W5R1-REGRESSION-01).
+// The five run-my-channel playbooks (comments-digest, episode-to-shorts,
+// footage-to-finished-video, monthly-review, publish-and-schedule) came with
+// channel autopilot (e0ed551ae); they stay out of the ChatGPT package only.
 const NATIVE_SKILLS = [
   'caption-style',
+  'comments-digest',
+  'episode-to-shorts',
+  'footage-to-finished-video',
   'hook-adaptation',
+  'monthly-review',
   'platform-copy',
+  'publish-and-schedule',
   'repurpose-long-video',
   'review-first-edit',
   'short-form-script',
@@ -134,7 +142,7 @@ const NATIVE_SKILLS = [
   'weekly-content-plan',
 ];
 
-test('every native host loads exactly the 8 playbooks and sigmora-media, never the REST skill (W5R1-REGRESSION-01)', async () => {
+test('every native host loads exactly the 13 playbooks and sigmora-media, never the REST skill (W5R1-REGRESSION-01)', async () => {
   const autoDiscovered = (await readdir(join(KIT_ROOT, 'skills'), { withFileTypes: true }))
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
