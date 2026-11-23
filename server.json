@@ -3,7 +3,7 @@
   "name": "org.sigmora/sigmora",
   "title": "Sigmora",
   "description": "Edit, caption, clip, render and schedule short-form video in your Sigmora workspace.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "websiteUrl": "https://www.sigmora.org",
   "repository": {
     "url": "https://github.com/mlsniperpro/sigmora-platform",

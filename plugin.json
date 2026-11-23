@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "sigmora",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Edit, caption, render and schedule short-form video from a conversation. Your assistant plans and writes; Sigmora does the media work in your own Sigmora workspace.",
   "author": {
     "name": "Sigmora",

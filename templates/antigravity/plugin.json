@@ -1,7 +1,7 @@
 {
   "$schema": "https://antigravity.google/schemas/v1/plugin.json",
   "name": "sigmora",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Edit, caption, render and schedule short-form video from Antigravity. Review-first Sigmora media workflows over the Sigmora MCP server (mcp_config.json); you sign in with OAuth, so no API key is stored.",
   "icon": "https://sigmora.org/icon-512.png"
 }
