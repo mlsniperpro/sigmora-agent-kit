@@ -45,3 +45,7 @@ Never invent statistics, names or results; mark any claim that needs a source.
 
 ## Next
 When they have recorded it, bring the footage in with `assets_import` (a file or public URL) and follow the review-first-edit playbook.
+
+## Connection
+
+Sigmora's tools (named in backticks in this skill) come from the Sigmora connection: the MCP server at https://api.sigmora.org/mcp, set up in one step at https://docs.sigmora.org/mcp-server. Without it, do the parts that need no tool and say which steps need Sigmora.

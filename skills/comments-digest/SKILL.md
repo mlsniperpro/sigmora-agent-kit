@@ -27,3 +27,7 @@ Sigmora's tools do not return a channel's comments yet. Read them where you can:
 
 ## End by writing the journal
 One `channels_journal_append` per step that changed something, with a new `idempotencyKey` each: `made` (what, with `costCredits` exactly as the tool results said and the ids in `refs`), `results` (`metrics`), `plan` (what the next run should do) or `note`. Sigmora writes its own `published`, `held` and `refused` entries for every publish and for the person's decision on a held post; anything else you did is a `note`. Write so that another agent with only the brief and the journal can pick the channel up.
+
+## Connection
+
+Sigmora's tools (named in backticks in this skill) come from the Sigmora connection: the MCP server at https://api.sigmora.org/mcp, set up in one step at https://docs.sigmora.org/mcp-server. Without it, do the parts that need no tool and say which steps need Sigmora.

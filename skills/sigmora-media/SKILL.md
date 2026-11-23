@@ -7,6 +7,8 @@ description: Use Sigmora to inspect project media, upload local assets, propose 
 
 Use Sigmora as the media backend while the current host remains the agent runtime. Keep the user's model-provider identity and credentials inside that host.
 
+Sigmora's tools come from the Sigmora connection: the MCP server at https://api.sigmora.org/mcp (set up at https://docs.sigmora.org/mcp-server) or, for uploads, the `sigmora` CLI. Without it, say which steps need Sigmora.
+
 ## Non-negotiable boundaries
 
 - Establish one explicit `projectId` before reading, creating, transforming, or spending against media. Never infer that a project open in a browser is also active here.

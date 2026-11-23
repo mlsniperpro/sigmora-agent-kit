@@ -42,3 +42,7 @@ If the balance is short, say the cost and the balance in one plain sentence and 
 
 ## Posting
 Post nothing until the person explicitly confirms all three: the account (from `publish_destinations_list`), the exact caption, and the time (now, or `scheduledAt` with its time zone). Then call `publish_artifact` once with one `idempotencyKey`. A `pending-approval` result is waiting for approval in Sigmora; say so. Never say a post is live or scheduled until the tool result says it is. No connected account: share https://sigmora.org/settings/connections; never try to connect a social account in this chat.
+
+## Connection
+
+Sigmora's tools (named in backticks in this skill) come from the Sigmora connection: the MCP server at https://api.sigmora.org/mcp, set up in one step at https://docs.sigmora.org/mcp-server. Without it, do the parts that need no tool and say which steps need Sigmora.

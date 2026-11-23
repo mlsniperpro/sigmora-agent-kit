@@ -40,3 +40,7 @@ Deconstruction bullets, the original script in the short-form-script format, the
 4. For a `jobId`, poll `jobs_get` until `done`, `failed`, `cancelled` or `qa_failed`; only `done` is success. Never resubmit because a response or a poll failed; a retry reuses the same key.
 
 If the balance is short, say the cost and the balance in one plain sentence and link only https://sigmora.org/pricing, as information: "That render uses 300 credits. You have 100. Plan and credit details: https://sigmora.org/pricing". Do not pitch plans or promotions and never link any other payment page.
+
+## Connection
+
+Sigmora's tools (named in backticks in this skill) come from the Sigmora connection: the MCP server at https://api.sigmora.org/mcp, set up in one step at https://docs.sigmora.org/mcp-server. Without it, do the parts that need no tool and say which steps need Sigmora.
